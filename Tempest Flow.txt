@@ -1,0 +1,3667 @@
+[
+    {
+        "id": "19cef663.c9958a",
+        "type": "tab",
+        "label": "WeatherFlow Tempest UDP",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d7c1baa0.66b138",
+        "type": "udp in",
+        "z": "19cef663.c9958a",
+        "name": "Tempest PWS",
+        "iface": "",
+        "port": "50222",
+        "ipv": "udp4",
+        "multicast": "false",
+        "group": "",
+        "datatype": "utf8",
+        "x": 110,
+        "y": 800,
+        "wires": [
+            [
+                "17716bb3.e50f14"
+            ]
+        ]
+    },
+    {
+        "id": "17716bb3.e50f14",
+        "type": "json",
+        "z": "19cef663.c9958a",
+        "name": "jsonconverter",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 380,
+        "y": 800,
+        "wires": [
+            [
+                "ab6736d8.03a7f8"
+            ]
+        ],
+        "inputLabels": [
+            "udpIn"
+        ],
+        "outputLabels": [
+            "jsonOut"
+        ]
+    },
+    {
+        "id": "ab6736d8.03a7f8",
+        "type": "switch",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "property": "payload.type",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "evt_precip",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "evt_strike",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "rapid_wind",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "obs_st",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "obs_sky",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "device_status",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "hub_status",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 7,
+        "x": 550,
+        "y": 800,
+        "wires": [
+            [
+                "8509060e.4aaa58"
+            ],
+            [
+                "375443b2.a03f9c",
+                "dbcf790c.801018",
+                "b279ae2a.3b754"
+            ],
+            [
+                "f03b367.1c5c8c8",
+                "e3df819.767148"
+            ],
+            [
+                "5f9f6fe1.24b1e",
+                "f5692ff8.bc997",
+                "37b3e764.555248",
+                "325e9b3f.c66e24",
+                "8add765d.e86638",
+                "3131056a.add42a",
+                "f5f19e9c.456f",
+                "f6f1e606.0589f8",
+                "d46a09e4.ddd888",
+                "dcc84006.74afd",
+                "1bb0bfb7.8b51",
+                "f392d1a.ae5f03",
+                "74bafa05.89dfa4",
+                "83341290.66a23",
+                "e869fe3f.e670d",
+                "aad76ba6.59e048",
+                "3da00adf.b971d6",
+                "18957883.c30c07",
+                "419729a3.73e9b8",
+                "611d14cd.07ce4c",
+                "687b31e9.02001",
+                "31ae7faa.afcc3"
+            ],
+            [
+                "ee6412a5.39fe3"
+            ],
+            [
+                "d83d7469.7433d8",
+                "7ea2ea8a.501584"
+            ],
+            [
+                "955ec64.7a06c38",
+                "9ca272b.16edf9"
+            ]
+        ],
+        "inputLabels": [
+            "jsonIn"
+        ]
+    },
+    {
+        "id": "f03b367.1c5c8c8",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Speed RT (km/h)",
+        "func": "msg.payload = (msg.payload.ob['1'] * 3.6).toFixed(2);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1060,
+        "y": 540,
+        "wires": [
+            [
+                "db759679.0022a8",
+                "dc73c88d.5d2df8"
+            ]
+        ],
+        "outputLabels": [
+            "mph"
+        ]
+    },
+    {
+        "id": "8add765d.e86638",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Pressure (mbar)",
+        "func": "msg.payload = (msg.payload.obs[0][6] || 0).toFixed(0);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1040,
+        "y": 620,
+        "wires": [
+            [
+                "474b4fb7.e8c06",
+                "25c5ae97.8f9c32"
+            ]
+        ]
+    },
+    {
+        "id": "3131056a.add42a",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Temperature (°C)",
+        "func": "msg.payload = (msg.payload.obs[0][7] || 0).toFixed(2);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1050,
+        "y": 660,
+        "wires": [
+            [
+                "31e6559.75e83aa",
+                "fe04c4d2.5d7bd8"
+            ]
+        ]
+    },
+    {
+        "id": "f5f19e9c.456f",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Humidity (%H)",
+        "func": "msg.payload = (msg.payload.obs[0][8] || 0).toFixed(2);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1040,
+        "y": 700,
+        "wires": [
+            [
+                "95c5b3a3.8bb11",
+                "7643895b.8ed9f8"
+            ]
+        ]
+    },
+    {
+        "id": "83341290.66a23",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Lightning Count",
+        "func": "msg.payload = msg.payload.obs[0][15];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1040,
+        "y": 1060,
+        "wires": [
+            [
+                "47ddf163.50b48",
+                "e4f24ff1.a3b24"
+            ]
+        ]
+    },
+    {
+        "id": "74bafa05.89dfa4",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Lightning Distance (km)",
+        "func": "msg.payload = msg.payload.obs[0][14];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1070,
+        "y": 980,
+        "wires": [
+            [
+                "117d8ff4.3fb72",
+                "db716757.109e18"
+            ]
+        ]
+    },
+    {
+        "id": "e869fe3f.e670d",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Battery (V)",
+        "func": "msg.payload = (msg.payload.obs[0][16]).toFixed(2);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1030,
+        "y": 1180,
+        "wires": [
+            [
+                "12e43f09.6c6131",
+                "e6eb9ec3.adb85",
+                "b9cd403d.36f3d"
+            ]
+        ]
+    },
+    {
+        "id": "474b4fb7.e8c06",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "e1e2d909.b481b8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Pressure",
+        "label": "mbar",
+        "format": "{{value | number:1}}",
+        "min": "700",
+        "max": "1100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 1460,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "31e6559.75e83aa",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "7ff01929.cd13c8",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Temperature",
+        "label": "°C",
+        "format": "{{value | number:1 }}",
+        "min": "-20",
+        "max": "45",
+        "colors": [
+            "#00a4db",
+            "#01d508",
+            "#ca3838"
+        ],
+        "seg1": "0",
+        "seg2": "30",
+        "x": 1470,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "95c5b3a3.8bb11",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "7455eba8.572ec4",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humidity",
+        "label": "%",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 1460,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "12e43f09.6c6131",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "8edaf23e.09b35",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Status",
+        "label": "volts",
+        "format": "{{value | number:2}}",
+        "min": "2.1",
+        "max": "3.3",
+        "colors": [
+            "#ca3838",
+            "#e6e600",
+            "#00b50c"
+        ],
+        "seg1": "2.4",
+        "seg2": "2.6",
+        "x": 1450,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "e6eb9ec3.adb85",
+        "type": "ui_chart",
+        "z": "19cef663.c9958a",
+        "name": "Battery",
+        "group": "8edaf23e.09b35",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "label": "",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "604800",
+        "cutout": 0,
+        "useOneColor": false,
+        "useUTC": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 1260,
+        "y": 1180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f6f1e606.0589f8",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Illuminance (Lux)",
+        "func": "msg.payload = msg.payload.obs[0][9];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1050,
+        "y": 740,
+        "wires": [
+            [
+                "d0c2dd81.e098",
+                "65e79bdb.db3d34"
+            ]
+        ]
+    },
+    {
+        "id": "d0c2dd81.e098",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "185a7bf8.061584",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Brightness",
+        "label": "lux",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "120000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 1470,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "d46a09e4.ddd888",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "UV Index",
+        "func": "msg.payload = msg.payload.obs[0][10];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1020,
+        "y": 780,
+        "wires": [
+            [
+                "b8a9a1f.390d96",
+                "3bf62651.68840a"
+            ]
+        ]
+    },
+    {
+        "id": "b8a9a1f.390d96",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "185a7bf8.061584",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "UV",
+        "label": "",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "14",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "7",
+        "seg2": "10",
+        "x": 1450,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "dcc84006.74afd",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Solar Radiation (W/m^2)",
+        "func": "msg.payload = msg.payload.obs[0][11];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1070,
+        "y": 820,
+        "wires": [
+            [
+                "d5f86a05.9fbea8",
+                "7c0eda44.c282b4"
+            ]
+        ]
+    },
+    {
+        "id": "d5f86a05.9fbea8",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "185a7bf8.061584",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Solar Radiation",
+        "label": "W/m^2",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "1120",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 1480,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "f5692ff8.bc997",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Speed (km/h)",
+        "func": "msg.payload = (msg.payload.obs[0][2] * 3.6).toFixed(2);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1050,
+        "y": 420,
+        "wires": [
+            [
+                "731c08a7.a79e48",
+                "6bae3c59.c64244",
+                "b4f0663.ce23298"
+            ]
+        ]
+    },
+    {
+        "id": "731c08a7.a79e48",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "ba1441ff.541ca",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Speed",
+        "label": "km/h",
+        "format": "{{value | number: 1}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "30",
+        "seg2": "70",
+        "x": 1450,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "37b3e764.555248",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Gust (km/h)",
+        "func": "msg.payload = (msg.payload.obs[0][3] * 3.6).toFixed(2);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1050,
+        "y": 460,
+        "wires": [
+            [
+                "34d608e1.beb4e8",
+                "326b22d7.6298be"
+            ]
+        ]
+    },
+    {
+        "id": "34d608e1.beb4e8",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "ba1441ff.541ca",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Gust",
+        "label": "km/h",
+        "format": "{{value | number:1}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "30",
+        "seg2": "70",
+        "x": 1450,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "36a9a66c.61e6fa",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "ba1441ff.541ca",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "compass",
+        "title": "Direction",
+        "label": "",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "360",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 1460,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "e3df819.767148",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Dir RT (°)",
+        "func": "msg.payload = msg.payload.ob['2'];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1040,
+        "y": 580,
+        "wires": [
+            [
+                "7f5a09ef.cb9668",
+                "b2ece18c.83dc7"
+            ]
+        ],
+        "outputLabels": [
+            "degrees"
+        ]
+    },
+    {
+        "id": "955ec64.7a06c38",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "HUB Firmware",
+        "func": "msg.payload = msg.payload.firmware_revision;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1040,
+        "y": 1300,
+        "wires": [
+            [
+                "7080e0f0.616d6",
+                "87d68520.4d4aa8"
+            ]
+        ]
+    },
+    {
+        "id": "7080e0f0.616d6",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "e739772c.116b68",
+        "order": 6,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Hub Firmware:",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 1660,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "aad76ba6.59e048",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Tempest Firmware",
+        "func": "msg.payload = msg.payload.firmware_revision;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1050,
+        "y": 1260,
+        "wires": [
+            [
+                "2939f5e7.b2ed5a",
+                "7a31e985.f62d98"
+            ]
+        ]
+    },
+    {
+        "id": "2939f5e7.b2ed5a",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "e739772c.116b68",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Tempest Firmware:",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 1670,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "8509060e.4aaa58",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Inizio Precipitazioni",
+        "func": "secs_since_epoch = msg.payload.evt[0];\nvar start_time = new Date(secs_since_epoch).toLocaleString();\nmsg.payload = start_time\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1050,
+        "y": 940,
+        "wires": [
+            [
+                "6ab6fb8d.a205b4",
+                "720df803.17b968"
+            ]
+        ]
+    },
+    {
+        "id": "6ab6fb8d.a205b4",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "10cb71fc.9b2d0e",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Last precip start EVT",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 1680,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "375443b2.a03f9c",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "strike localtime",
+        "func": "secs_since_epoch = msg.payload.evt[0];\nvar start_time = new Date(secs_since_epoch).toLocaleString();\nmsg.payload = start_time;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1040,
+        "y": 1100,
+        "wires": [
+            [
+                "b4928a23.3a6648",
+                "d91fd1f5.7cd67"
+            ]
+        ]
+    },
+    {
+        "id": "dbcf790c.801018",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "strike energy",
+        "func": "secs_since_epoch = msg.payload.evt[2];\nvar start_time = new Date(secs_since_epoch).toLocaleString();\nmsg.payload = start_time\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1030,
+        "y": 1140,
+        "wires": [
+            [
+                "538aa3e1.b55b4c",
+                "7eaaa287.0f99dc"
+            ]
+        ]
+    },
+    {
+        "id": "d83d7469.7433d8",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Tempest RSSI",
+        "func": "msg.payload = msg.payload.rssi;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1040,
+        "y": 1340,
+        "wires": [
+            [
+                "e278dfc3.332df",
+                "3d33ef82.6cc7a"
+            ]
+        ]
+    },
+    {
+        "id": "e278dfc3.332df",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "e739772c.116b68",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Tempest RSSI",
+        "label": "",
+        "format": "{{value}}",
+        "min": "-100",
+        "max": "0",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "40",
+        "seg2": "60",
+        "x": 1480,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "7ea2ea8a.501584",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Sensor Status",
+        "func": "msg.payload = parseInt(\"0x\"+msg.payload.sensor_status);\nmsg.payload = msg.payload.toString(2).padStart(9, '0');\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1040,
+        "y": 1420,
+        "wires": [
+            [
+                "f285f56.fffd308"
+            ]
+        ]
+    },
+    {
+        "id": "9ca272b.16edf9",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "HUB RSSI",
+        "func": "msg.payload = msg.payload.rssi;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1030,
+        "y": 1380,
+        "wires": [
+            [
+                "a61737a3.596c28",
+                "6ebd5fa9.42133"
+            ]
+        ]
+    },
+    {
+        "id": "a61737a3.596c28",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "e739772c.116b68",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Hub RSSI",
+        "label": "",
+        "format": "{{value}}",
+        "min": "-100",
+        "max": "0",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "40",
+        "seg2": "60",
+        "x": 1460,
+        "y": 1380,
+        "wires": []
+    },
+    {
+        "id": "5f9f6fe1.24b1e",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Lull (km/h)",
+        "func": "msg.payload = (msg.payload.obs[0][1] * 3.6).toFixed(2);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1040,
+        "y": 380,
+        "wires": [
+            [
+                "f2bdc416.790338",
+                "328fb3f1.8ddddc"
+            ]
+        ]
+    },
+    {
+        "id": "f2bdc416.790338",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "ba1441ff.541ca",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Lull",
+        "label": "km/h",
+        "format": "{{value | number:1}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "30",
+        "seg2": "70",
+        "x": 1450,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "325e9b3f.c66e24",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Dir (°)",
+        "func": "msg.payload = msg.payload.obs[0][4];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1030,
+        "y": 500,
+        "wires": [
+            [
+                "36a9a66c.61e6fa",
+                "a88477e2.da0688"
+            ]
+        ]
+    },
+    {
+        "id": "1bb0bfb7.8b51",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Precipitazioni (mm)",
+        "func": "msg.payload = (msg.payload.obs[0][12] || 0).toFixed(1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1050,
+        "y": 860,
+        "wires": [
+            [
+                "98571f63.da071",
+                "fa90c91.93fdb38"
+            ]
+        ]
+    },
+    {
+        "id": "98571f63.da071",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "10cb71fc.9b2d0e",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Rain Q.ty",
+        "label": "mm",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "25",
+        "seg2": "40",
+        "x": 1460,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "f392d1a.ae5f03",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Precipitazioni (Tipo)",
+        "func": "msg.payload = msg.payload.obs[0][13];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1050,
+        "y": 900,
+        "wires": [
+            [
+                "e7ec4ce1.1c7e"
+            ]
+        ]
+    },
+    {
+        "id": "e7ec4ce1.1c7e",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "10cb71fc.9b2d0e",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Tipo",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 1630,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "117d8ff4.3fb72",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "36f5e1d9.a4827e",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Distance ST",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 1650,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "47ddf163.50b48",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "36f5e1d9.a4827e",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Count",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 1630,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "ee6412a5.39fe3",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Rain Today",
+        "func": "msg.payload = msg.payload.obs[0][11];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1030,
+        "y": 1220,
+        "wires": [
+            [
+                "ca84621b.fd421"
+            ]
+        ]
+    },
+    {
+        "id": "b279ae2a.3b754",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Lightning Distance (km)",
+        "func": "msg.payload = msg.payload.obs[0][1];\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1070,
+        "y": 1020,
+        "wires": [
+            [
+                "179c0a97.eb9465",
+                "c74774c7.68e428"
+            ]
+        ]
+    },
+    {
+        "id": "179c0a97.eb9465",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "36f5e1d9.a4827e",
+        "order": 2,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Distance EVT",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 1660,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "b4928a23.3a6648",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "36f5e1d9.a4827e",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Last Strike EVT:",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 1660,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "538aa3e1.b55b4c",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "36f5e1d9.a4827e",
+        "order": 7,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "Energy EVT:",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 1650,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "db759679.0022a8",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "ba1441ff.541ca",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Speed RT",
+        "label": "km/h",
+        "format": "{{value | number: 1}}",
+        "min": 0,
+        "max": "100",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "30",
+        "seg2": "70",
+        "x": 1460,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "7f5a09ef.cb9668",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "ba1441ff.541ca",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "gtype": "compass",
+        "title": "Direction RT",
+        "label": "",
+        "format": "{{value}}",
+        "min": "0",
+        "max": "360",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 1470,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "f285f56.fffd308",
+        "type": "split",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "splt": "1",
+        "spltType": "len",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1270,
+        "y": 1780,
+        "wires": [
+            [
+                "c8f7af71.428c3"
+            ]
+        ]
+    },
+    {
+        "id": "c8f7af71.428c3",
+        "type": "switch",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "property": "parts.index",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "8",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "7",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "6",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "5",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "4",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 9,
+        "x": 2490,
+        "y": 1780,
+        "wires": [
+            [
+                "e2fcb94.d281048",
+                "2d9d9afc.f86876"
+            ],
+            [
+                "d8e6c43c.a4a098",
+                "da3a4f32.5b1da"
+            ],
+            [
+                "a55d98e7.849a98",
+                "24e45ec.d1893a2"
+            ],
+            [
+                "c7c1e575.2d4cc8",
+                "813196b3.0aaf08"
+            ],
+            [
+                "62357001.f0446",
+                "9835ca36.fc7c18"
+            ],
+            [
+                "5c76f7f3.a7e9c8",
+                "fdf449c9.e23f88"
+            ],
+            [
+                "f7427b92.0c8428",
+                "ffdef134.3ea13"
+            ],
+            [
+                "bf56b429.058518",
+                "eaf5cbd1.d3ee38"
+            ],
+            [
+                "75b9547b.e5c66c",
+                "d0d6698c.29dd18"
+            ]
+        ]
+    },
+    {
+        "id": "e2fcb94.d281048",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "e739772c.116b68",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "LIGHTNING FAILED",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 2780,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "d8e6c43c.a4a098",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "e739772c.116b68",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "LIGHTNING NOISE",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 2770,
+        "y": 1460,
+        "wires": []
+    },
+    {
+        "id": "a55d98e7.849a98",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "e739772c.116b68",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "LIGHTNING DISTURBER",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 2790,
+        "y": 1560,
+        "wires": []
+    },
+    {
+        "id": "c7c1e575.2d4cc8",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "e739772c.116b68",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "PRESSURE FAILED",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 2780,
+        "y": 1660,
+        "wires": []
+    },
+    {
+        "id": "62357001.f0446",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "e739772c.116b68",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "TEMPERATURE FAILED",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 2790,
+        "y": 1760,
+        "wires": []
+    },
+    {
+        "id": "5c76f7f3.a7e9c8",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "e739772c.116b68",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "HUMIDITY FAILED",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 2770,
+        "y": 1860,
+        "wires": []
+    },
+    {
+        "id": "f7427b92.0c8428",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "e739772c.116b68",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "WIND FAILED",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 2760,
+        "y": 1960,
+        "wires": []
+    },
+    {
+        "id": "bf56b429.058518",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "e739772c.116b68",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "RAIN FAILED",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 2750,
+        "y": 2060,
+        "wires": []
+    },
+    {
+        "id": "75b9547b.e5c66c",
+        "type": "ui_text",
+        "z": "19cef663.c9958a",
+        "group": "e739772c.116b68",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "name": "",
+        "label": "LIGHT/UV FAILED",
+        "format": "{{msg.payload}}",
+        "layout": "row-center",
+        "x": 2770,
+        "y": 2160,
+        "wires": []
+    },
+    {
+        "id": "328fb3f1.8ddddc",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Wind Lull",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Bonaccia"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:windsock"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "km/h"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2060,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6bae3c59.c64244",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Wind Speed",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Velocità del Vento"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:weather-windy"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "km/h"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1870,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "326b22d7.6298be",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Wind Gust",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Raffiche"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:windsock"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "km/h"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2070,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "a88477e2.da0688",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Wind Dir",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Direzione del Vento"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:compass-rose"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1860,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dc73c88d.5d2df8",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Wind Speed RT",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Velocità del Vento RT"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:weather-windy"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "km/h"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2080,
+        "y": 540,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b2ece18c.83dc7",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Wind Dir RT",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Direzione del Vento RT"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:compass-rose"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1870,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "25c5ae97.8f9c32",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Pressure",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Pressione Atmosferica"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:gauge"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "mbar"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "merge",
+        "x": 2060,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fe04c4d2.5d7bd8",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Temperature",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Temperatura"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:thermometer"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°C"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1870,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7643895b.8ed9f8",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Humidity",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Umidità"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:water-percent"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "%H"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2060,
+        "y": 700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "65e79bdb.db3d34",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Illuminance",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Luminosità"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:brightness-5"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "lux"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1870,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3bf62651.68840a",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "UV Index",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Indice UV"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:shield-sun-outline"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2060,
+        "y": 780,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7c0eda44.c282b4",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Solar Radiation",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Irraggiamento"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:white-balance-sunny"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "W/m^2"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1880,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fa90c91.93fdb38",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Rain Acc.",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Precipitazioni Accumulate"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:weather-pouring"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "mm"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2060,
+        "y": 860,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7fae5418.93c7dc",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "10cb71fc.9b2d0e",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Rain Duration",
+        "label": "min",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "2000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "200",
+        "seg2": "350",
+        "x": 1480,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "db716757.109e18",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Lightning Dist ST",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Distanza Ultimo Fulmine (ST)"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:flash"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "km"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1890,
+        "y": 980,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c74774c7.68e428",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Lightning Dist EVT",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Distanza Ultimo Fulmine (EVT)"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:flash"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "km"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2090,
+        "y": 1020,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e4f24ff1.a3b24",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Lightning Count",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Fulmini Caduti"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:flash-outline"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1880,
+        "y": 1060,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d91fd1f5.7cd67",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Last Lightning",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Ultimo Fulmine"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:weather-lightning"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2080,
+        "y": 1100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7eaaa287.0f99dc",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Strike Energy",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Potenza Saetta"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:lightning-bolt-outline"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1870,
+        "y": 1140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b9cd403d.36f3d",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Battery",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Batteria"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:battery"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "V"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2060,
+        "y": 1180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ca84621b.fd421",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Rain Duration",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Durata Precipitazioni"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:av-timer"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "min"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1880,
+        "y": 1220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "720df803.17b968",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Last Rain",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Ultima Precipitazione"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:update"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2060,
+        "y": 940,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7a31e985.f62d98",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Tempest Firmware",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Station Firmware"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cloud-download"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2090,
+        "y": 1260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "87d68520.4d4aa8",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Hub Firmware",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Hub Firmware"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cloud-download"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1880,
+        "y": 1300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3d33ef82.6cc7a",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Tempest RSSI",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Station RSSI"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:radio-tower"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "db"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2080,
+        "y": 1340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "6ebd5fa9.42133",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Hub RSSI",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Hub RSSI"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:wifi"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "db"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1860,
+        "y": 1380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2d9d9afc.f86876",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "LIGHTNING FAILED",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "binary_sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Avaria Sensore Fulmini"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:image-broken-variant"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2780,
+        "y": 1400,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "da3a4f32.5b1da",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "LIGHTNING NOISE",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "binary_sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Rumore Sensore Fulmini"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:vibrate"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2770,
+        "y": 1500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "24e45ec.d1893a2",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "LIGHTNING DISTURBER",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "binary_sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Disturbo Sensore Fulmini"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:car-light-high"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2790,
+        "y": 1600,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "813196b3.0aaf08",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "PRESSURE FAILED",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "binary_sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Avaria Sensore Pressione"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:image-broken-variant"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2780,
+        "y": 1700,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9835ca36.fc7c18",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "TEMPERATURE FAILED",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "binary_sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Avaria Sensore Temperatura"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:image-broken-variant"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2790,
+        "y": 1800,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fdf449c9.e23f88",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "HUMIDITY FAILED",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "binary_sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Avaria Sensore Umidità"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:image-broken-variant"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2770,
+        "y": 1900,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "ffdef134.3ea13",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "WIND FAILED",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "binary_sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Avaria Sensore Vento"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:image-broken-variant"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2760,
+        "y": 2000,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "eaf5cbd1.d3ee38",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "RAIN FAILED",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "binary_sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Avaria Sensore Pioggia"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:image-broken-variant"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2750,
+        "y": 2100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "d0d6698c.29dd18",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "LIGHT FAILED",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "binary_sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Avaria Sensore Luce/UV"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:image-broken-variant"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2760,
+        "y": 2200,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b4f0663.ce23298",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Beaufort Calculus",
+        "func": "msg.payload = Math.round(Math.cbrt(Math.pow(msg.payload,2)/9));\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1290,
+        "y": 340,
+        "wires": [
+            [
+                "2e3a0bec.17d984",
+                "7ce1a0b3.ac9d7"
+            ]
+        ]
+    },
+    {
+        "id": "2e3a0bec.17d984",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "ba1441ff.541ca",
+        "order": 5,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Beaufort",
+        "label": "",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "12",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "6",
+        "seg2": "9",
+        "x": 1460,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "7ce1a0b3.ac9d7",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Beaufort Index",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Indice Beaufort"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:gauge-empty"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1880,
+        "y": 340,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "3da00adf.b971d6",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Dew Point Calculus",
+        "func": "var a = 17.271;\nvar b = 237.7;\nvar temp = Math.log(msg.payload.obs[0][8] * 0.01) + ((a * msg.payload.obs[0][7]) / (b + msg.payload.obs[0][7]));\nvar Td = (b * temp) / (a - temp);\nmsg.payload = Td.toFixed(2);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1050,
+        "y": 300,
+        "wires": [
+            [
+                "7c1dcc7b.3c6fa4",
+                "25e548c9.8b7808"
+            ]
+        ]
+    },
+    {
+        "id": "7c1dcc7b.3c6fa4",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "7ff01929.cd13c8",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Dew Point",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "45",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 1470,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "25e548c9.8b7808",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Dew Point",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Punto di Rugiada"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:water"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°C"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2070,
+        "y": 300,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "18957883.c30c07",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Thom Index",
+        "func": "var temp = msg.payload.obs[0][7];\nvar hum = msg.payload.obs[0][8];\nTHI = temp - (0.55 - 0.0055 * hum) * (temp - 14.5);\nmsg.payload = THI.toFixed(1);\nreturn msg;\n\n\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1030,
+        "y": 260,
+        "wires": [
+            [
+                "7010029b.5048cc",
+                "e0dda310.d0fd"
+            ]
+        ]
+    },
+    {
+        "id": "7010029b.5048cc",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "7ff01929.cd13c8",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Thom Index",
+        "label": "°C",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "45",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 1470,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "e0dda310.d0fd",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Thom Index",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Thom Index"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:cow"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1870,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "419729a3.73e9b8",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Heat Index",
+        "func": "var temp = (msg.payload.obs[0][7]) * 1.8 + 32;\nvar hum = msg.payload.obs[0][8];\nhi = 0.5 * (temp + 61.0 + ((temp - 68.0) * 1.2) + (hum * 0.094));\nif (hi > 79) \n  {\n   hi = -42.379 + 2.04901523 * temp + 10.14333127 * hum + -0.22475541 * temp * hum + -0.00683783 * Math.pow(temp, 2) + -0.05481717 * Math.pow(hum, 2) + 0.00122874 * Math.pow(temp, 2) * hum + 0.00085282 * temp * Math.pow(hum, 2) + -0.00000199 * Math.pow(temp, 2) * Math.pow(hum, 2);\n   if((hum < 13) && (temp >= 80.0) && (temp <= 112.0))\n     hi -= ((13.0 - hum) * 0.25) * Math.sqrt((17.0 - Math.abs(temp - 95.0)) * 0.05882);\n   else if((hum > 85.0) && (temp >= 80.0) && (temp <= 87.0))\n      hi += ((hum - 85.0) * 0.1) * ((87.0 - temp) * 0.2);\n  }\nmsg.payload = ((hi - 32) / 1.8).toFixed(1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1030,
+        "y": 220,
+        "wires": [
+            [
+                "4972d3d1.26a0cc",
+                "6b4c64d8.dca50c"
+            ]
+        ]
+    },
+    {
+        "id": "4972d3d1.26a0cc",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "7ff01929.cd13c8",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "HI Index",
+        "label": "",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "45",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 1460,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "6b4c64d8.dca50c",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Indice di Calore",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Indice di Calore"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:weather-sunny-alert"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2080,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "611d14cd.07ce4c",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Chill - Old Formula",
+        "func": "var W = msg.payload.obs[0][2];\nvar T = msg.payload.obs[0][7];\nvar a = Math.sqrt(W);\nWCI = 33 - (33 - T) * (0.474266 + 0.453843 * a - 0.0453843 * W);\nmsg.payload = Math.round(WCI);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1070,
+        "y": 180,
+        "wires": [
+            [
+                "cb721382.7b5b3",
+                "573c51fb.4ecb1"
+            ]
+        ]
+    },
+    {
+        "id": "cb721382.7b5b3",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "ba1441ff.541ca",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Wind Chill - Old",
+        "label": "",
+        "format": "{{value}}",
+        "min": "40",
+        "max": "-45",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "5",
+        "seg2": "-25",
+        "x": 1480,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "573c51fb.4ecb1",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Wind Chill - Old",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Wind Chill (Old Formula)"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:thermometer-chevron-down"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°C"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1880,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "687b31e9.02001",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Chill - New Formula",
+        "func": "var W = msg.payload.obs[0][2] * 3.6;\nvar Ta = msg.payload.obs[0][7];\nvar a = Math.pow(W, 0.16);\nWCI = (13.12 + 0.6215 * Ta) - (11.37 * a) + (0.3965 * Ta * a);\nmsg.payload = Math.round(WCI);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1070,
+        "y": 140,
+        "wires": [
+            [
+                "9004cd5e.f7611",
+                "755a7d1a.d6a0e4"
+            ]
+        ]
+    },
+    {
+        "id": "9004cd5e.f7611",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "ba1441ff.541ca",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Wind Chill - New",
+        "label": "",
+        "format": "{{value}}",
+        "min": "40",
+        "max": "-56",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "-10",
+        "seg2": "-20",
+        "x": 1490,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "755a7d1a.d6a0e4",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Wind Chill - New",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Wind Chill (New Formula)"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:thermometer-chevron-down"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°C"
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 2090,
+        "y": 140,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "31ae7faa.afcc3",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Humidex",
+        "func": "var Ta = msg.payload.obs[0][7];\nvar UR = msg.payload.obs[0][8];\nk1 = Math.pow(10, (7.5 * Ta / (237.7 + Ta)));\nk = 6.112 * k1 * UR / 100;\nUmidex = 1 * Ta + 0.5555 * (k - 10);\nmsg.payload = Math.round(Umidex);\nreturn msg;\n\n\n\n\n\n\n// prova dettagliata ma viene uguale\n\n//x0 = 7.5 * Ta\n//x00 = (237.7 + Ta)\n//x1 = x0 / x00   // 7.5*T/(237.7+T)\n//x2 = UR / 100\n//x3 = x1 * x2 // (7.5*T/(237.7+T))*U/100\n//x4 = Math.pow(10, x3)\n//x5 = 6.112 * x4\n//x6 = x5 - 10\n// Umidex=1*T+0.5555*x6\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1020,
+        "y": 100,
+        "wires": [
+            [
+                "1293dead.bd68f1",
+                "f71defa8.49a07"
+            ]
+        ]
+    },
+    {
+        "id": "1293dead.bd68f1",
+        "type": "ui_gauge",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "group": "7ff01929.cd13c8",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Humidex Index",
+        "label": "",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "45",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "x": 1480,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "f71defa8.49a07",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Humidex",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Umidex"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:format-header-pound"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "payload",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 1860,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "e1e2d909.b481b8",
+        "type": "ui_group",
+        "name": "Pressure",
+        "tab": "3fba958c.a2f8ca",
+        "order": 3,
+        "disp": true,
+        "width": "6"
+    },
+    {
+        "id": "7ff01929.cd13c8",
+        "type": "ui_group",
+        "name": "Temp",
+        "tab": "3fba958c.a2f8ca",
+        "order": 1,
+        "disp": true,
+        "width": "12"
+    },
+    {
+        "id": "7455eba8.572ec4",
+        "type": "ui_group",
+        "name": "Humidity",
+        "tab": "3fba958c.a2f8ca",
+        "order": 2,
+        "disp": true,
+        "width": "6"
+    },
+    {
+        "id": "8edaf23e.09b35",
+        "type": "ui_group",
+        "name": "Battery Voltages",
+        "tab": "36a29921.0a88ce",
+        "order": 3,
+        "disp": true,
+        "width": "6"
+    },
+    {
+        "id": "185a7bf8.061584",
+        "type": "ui_group",
+        "name": "Sun",
+        "tab": "3fba958c.a2f8ca",
+        "order": 5,
+        "disp": true,
+        "width": "6"
+    },
+    {
+        "id": "ba1441ff.541ca",
+        "type": "ui_group",
+        "name": "Wind",
+        "tab": "3fba958c.a2f8ca",
+        "order": 4,
+        "disp": true,
+        "width": "6"
+    },
+    {
+        "id": "e739772c.116b68",
+        "type": "ui_group",
+        "name": "STATUS",
+        "tab": "36a29921.0a88ce",
+        "order": 2,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "10cb71fc.9b2d0e",
+        "type": "ui_group",
+        "name": "Rain",
+        "tab": "3fba958c.a2f8ca",
+        "order": 6,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "36f5e1d9.a4827e",
+        "type": "ui_group",
+        "name": "Lightning",
+        "tab": "3fba958c.a2f8ca",
+        "order": 7,
+        "disp": true,
+        "width": "6",
+        "collapse": false
+    },
+    {
+        "id": "419830c5.54d54",
+        "type": "server",
+        "name": "Home Assistant",
+        "legacy": false,
+        "addon": true,
+        "rejectUnauthorizedCerts": true,
+        "ha_boolean": "y|yes|true|on|home|open",
+        "connectionDelay": true,
+        "cacheJson": true
+    },
+    {
+        "id": "3fba958c.a2f8ca",
+        "type": "ui_tab",
+        "name": "Weatherflow",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    },
+    {
+        "id": "36a29921.0a88ce",
+        "type": "ui_tab",
+        "name": "Status",
+        "icon": "dashboard",
+        "order": 2
+    }
+]
