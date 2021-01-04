@@ -1,5 +1,5 @@
 # WeatherFlow - Tempest UDP & API Integration
-UDP integration with NodeRED for Home Assistant
+UDP & Rest API integration with NodeRED for Home Assistant
 
 This is a Node-Red flow that expose full metrics to Home Assistant; for the correct running of the flow the Node-Red HACS is required for the HA-Entity creation.
 
