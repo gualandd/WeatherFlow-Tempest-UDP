@@ -11,6 +11,7 @@ it checks that all 52 have the green status and then allow the message flow to p
 For this reason, if someone will add or delete some entities from the flow is necessary to modify the number inside the funcion node that check the entities status.
 
 The derived metrics are calculated & tested with the most recents formulas.
+All entities created have the "tempest_" suffix.
 
 EXPOSED UDP INFO (sensor):
 - Hub s/n
