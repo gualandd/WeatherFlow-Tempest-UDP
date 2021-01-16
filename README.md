@@ -17,8 +17,11 @@ All entities created have the "tempest_" suffix.
 Changelog 16/01/2021:
 
 Added MQTT publishing: the flow create a "Tempest_PWS" main topic that is nested with all the available data;
+
 Removed Lightning Strike Distance & Date because no more available on API;
+
 Added 4 new sensors from API (Air Density, Sea Level Pressure, Wet Bulb Temp. and Delta T);
+
 Partial rebuild of the flow for avoid that new API metrics make problems.
 ********************************
 
