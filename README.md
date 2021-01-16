@@ -13,6 +13,14 @@ For this reason, if someone will add or delete some entities from the flow is ne
 The derived metrics are calculated & tested with the most recents formulas.
 All entities created have the "tempest_" suffix.
 
+********************************
+Changelog 16/01/2021:
+Added MQTT publishing: the flow create a "Tempest_PWS" main topic that is nested with all the available data;
+Removed Lightning Strike Distance & Date because no more available on API;
+Added 4 new sensors from API (Air Density, Sea Level Pressure, Wet Bulb Temp. and Delta T);
+Partial rebuild of the flow for avoid that new API metrics make problems.
+********************************
+
 EXPOSED UDP INFO (sensor):
 - Hub s/n
 - Hub Firmware
@@ -71,8 +79,10 @@ REST API METRICS & INFOS (sensor):
 - Total Today Precip (mm)
 - Total Today Precip Time (min)
 - Pressure Tendence
-- Last Lightning Strike (date & time)
-- Last Lightning Strike Distance (km)
+- Air Density
+- Sea Level Pressure
+- Wet Bulb Temperature
+- Delta T
 - Lightning Strike Count + Last 1hr & Last 3hr attributes
 
 Descriptions are in Italian, but are easy to translate.
