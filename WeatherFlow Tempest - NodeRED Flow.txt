@@ -2,7 +2,7 @@
     {
         "id": "19cef663.c9958a",
         "type": "tab",
-        "label": "WeatherFlow Tempest UDP + REST API",
+        "label": "WeatherFlow Tempest",
         "disabled": false,
         "info": ""
     },
@@ -89,10 +89,16 @@
                 "a8b14ec3.b54b7"
             ],
             [
-                "a0f83bae.c5bd58"
+                "7a31e985.f62d98",
+                "76fb4846.e8fcf8",
+                "ce69c028.22ccf",
+                "7ea2ea8a.501584"
             ],
             [
-                "4b8389de.9863f8"
+                "87d68520.4d4aa8",
+                "c578be80.1757d",
+                "453c40d4.658da",
+                "65c251ca.058d2"
             ]
         ],
         "inputLabels": [
@@ -110,13 +116,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Wind Speed RT (km/h)",
-        "func": "msg.windrt = Number((msg.payload * 3.6).toFixed(1));\nreturn msg;",
+        "func": "msg.payload = Number((msg.payload[1] * 3.6).toFixed(1));\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 3120,
-        "y": 1880,
+        "x": 2080,
+        "y": 1940,
         "wires": [
             [
                 "dc73c88d.5d2df8"
@@ -131,13 +137,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Pressure (mbar)",
-        "func": "msg.pressure = Number((msg.payload || 0).toFixed(0));\nreturn msg;",
+        "func": "msg.payload = Number((msg.payload || 0).toFixed(0));\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 2640,
-        "y": 760,
+        "y": 660,
         "wires": [
             [
                 "25c5ae97.8f9c32"
@@ -155,7 +161,7 @@
         "initialize": "",
         "finalize": "",
         "x": 2650,
-        "y": 820,
+        "y": 720,
         "wires": [
             [
                 "fe04c4d2.5d7bd8",
@@ -175,7 +181,7 @@
         "initialize": "",
         "finalize": "",
         "x": 2640,
-        "y": 1240,
+        "y": 1140,
         "wires": [
             [
                 "7643895b.8ed9f8",
@@ -233,7 +239,8 @@
         "y": 1620,
         "wires": [
             [
-                "7fcdcc44.716904"
+                "7fcdcc44.716904",
+                "58692782.f0dc68"
             ]
         ]
     },
@@ -242,13 +249,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Illuminance (Lux)",
-        "func": "msg.ill = msg.payload;\nreturn msg;",
+        "func": "msg.lux = msg.payload;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 2650,
-        "y": 1300,
+        "y": 1200,
         "wires": [
             [
                 "65e79bdb.db3d34"
@@ -266,7 +273,7 @@
         "initialize": "",
         "finalize": "",
         "x": 2620,
-        "y": 1380,
+        "y": 1280,
         "wires": [
             [
                 "9c17a941.f66ce8"
@@ -284,7 +291,7 @@
         "initialize": "",
         "finalize": "",
         "x": 2670,
-        "y": 1460,
+        "y": 1360,
         "wires": [
             [
                 "7c0eda44.c282b4",
@@ -303,7 +310,7 @@
         "initialize": "",
         "finalize": "",
         "x": 2650,
-        "y": 220,
+        "y": 120,
         "wires": [
             [
                 "6bae3c59.c64244",
@@ -317,13 +324,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Wind Gust (km/h)",
-        "func": "msg.gust = Number((msg.payload * 3.6).toFixed(1));\nreturn msg;",
+        "func": "msg.payload = Number((msg.payload * 3.6).toFixed(1));\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 2650,
-        "y": 580,
+        "y": 480,
         "wires": [
             [
                 "326b22d7.6298be"
@@ -335,13 +342,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Wind Dir RT (°)",
-        "func": "msg.dirrt = msg.payload;\nreturn msg;",
+        "func": "msg.payload = msg.payload[2];\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 3100,
-        "y": 1940,
+        "x": 2060,
+        "y": 2000,
         "wires": [
             [
                 "b2ece18c.83dc7",
@@ -357,13 +364,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Sensor Status",
-        "func": "binaryStr = Number(msg.payload).toString(2);\n\nif(binaryStr.length < 9)\n{\n while(binaryStr.length < 9) \n {\n  binaryStr = \"0\" + binaryStr;\n }\n}\nelse if(binaryStr.length > 9)\n{\n  binaryStr = binaryStr.slice(-9);\n}\nelse if(binaryStr.length == 9)\n{\n  binaryStr = binaryStr;\n}\nmsg.payload = binaryStr;\nreturn msg;",
+        "func": "binaryStr = Number(msg.payload.sensor_status).toString(2);\n\nif(binaryStr.length < 9)\n{\n while(binaryStr.length < 9) \n {\n  binaryStr = \"0\" + binaryStr;\n }\n}\nelse if(binaryStr.length > 9)\n{\n  binaryStr = binaryStr.slice(-9);\n}\nelse if(binaryStr.length == 9)\n{\n  binaryStr = binaryStr;\n}\nmsg.payload = binaryStr;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 3180,
-        "y": 2320,
+        "x": 1760,
+        "y": 2420,
         "wires": [
             [
                 "f285f56.fffd308",
@@ -376,13 +383,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Wind Lull (km/h)",
-        "func": "msg.lull = Number((msg.payload * 3.6).toFixed(1));\nreturn msg;",
+        "func": "msg.payload = Number((msg.payload * 3.6).toFixed(1));\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 2640,
-        "y": 160,
+        "y": 60,
         "wires": [
             [
                 "328fb3f1.8ddddc"
@@ -400,7 +407,7 @@
         "initialize": "",
         "finalize": "",
         "x": 2630,
-        "y": 640,
+        "y": 540,
         "wires": [
             [
                 "a88477e2.da0688",
@@ -437,8 +444,8 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 3580,
-        "y": 2320,
+        "x": 2560,
+        "y": 2420,
         "wires": [
             [
                 "c8f7af71.428c3"
@@ -502,8 +509,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 9,
-        "x": 3980,
-        "y": 2320,
+        "x": 3060,
+        "y": 2420,
         "wires": [
             [
                 "2d9d9afc.f86876"
@@ -573,7 +580,7 @@
                 "value": "km/h"
             }
         ],
-        "state": "lull",
+        "state": "payload",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
@@ -581,10 +588,11 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3580,
-        "y": 160,
+        "y": 60,
         "wires": [
             [
-                "fa4d5ec0.1a6a8"
+                "fa4d5ec0.1a6a8",
+                "41453ed9.a5287"
             ]
         ]
     },
@@ -624,10 +632,11 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3590,
-        "y": 220,
+        "y": 120,
         "wires": [
             [
-                "241abd3c.7ff6f2"
+                "241abd3c.7ff6f2",
+                "b29d523a.e73f4"
             ]
         ]
     },
@@ -659,7 +668,7 @@
                 "value": "km/h"
             }
         ],
-        "state": "gust",
+        "state": "payload",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
@@ -667,10 +676,11 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3590,
-        "y": 580,
+        "y": 480,
         "wires": [
             [
-                "86f4b776.2c3948"
+                "86f4b776.2c3948",
+                "bdbfeec5.e6778"
             ]
         ]
     },
@@ -710,10 +720,11 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3580,
-        "y": 640,
+        "y": 540,
         "wires": [
             [
-                "9212cf7.0572a3"
+                "9212cf7.0572a3",
+                "9aa0cd3b.79c83"
             ]
         ]
     },
@@ -745,18 +756,19 @@
                 "value": "km/h"
             }
         ],
-        "state": "windrt",
+        "state": "payload",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3600,
-        "y": 1880,
+        "x": 2580,
+        "y": 1940,
         "wires": [
             [
-                "fd4fe758.735c08"
+                "fd4fe758.735c08",
+                "dd6c2419.27e318"
             ]
         ]
     },
@@ -788,18 +800,19 @@
                 "value": "°"
             }
         ],
-        "state": "dirrt",
+        "state": "payload",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3590,
-        "y": 1940,
+        "x": 2570,
+        "y": 2000,
         "wires": [
             [
-                "89cac872.b9a128"
+                "89cac872.b9a128",
+                "b20c0827.966d28"
             ]
         ]
     },
@@ -831,7 +844,7 @@
                 "value": "mbar"
             }
         ],
-        "state": "pressure",
+        "state": "payload",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
@@ -839,10 +852,11 @@
         "outputLocationType": "none",
         "inputOverride": "merge",
         "x": 3580,
-        "y": 760,
+        "y": 660,
         "wires": [
             [
-                "e7e32174.8bb93"
+                "e7e32174.8bb93",
+                "6136853c.76221c"
             ]
         ]
     },
@@ -882,10 +896,11 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3590,
-        "y": 820,
+        "y": 720,
         "wires": [
             [
-                "6213508f.e3c4e"
+                "6213508f.e3c4e",
+                "e353e935.ebf438"
             ]
         ]
     },
@@ -925,10 +940,11 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3580,
-        "y": 1240,
+        "y": 1140,
         "wires": [
             [
-                "7b573371.86229c"
+                "7b573371.86229c",
+                "24e210c1.9a0f9"
             ]
         ]
     },
@@ -960,7 +976,7 @@
                 "value": "lux"
             }
         ],
-        "state": "ill",
+        "state": "lux",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
@@ -968,10 +984,11 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3590,
-        "y": 1300,
+        "y": 1200,
         "wires": [
             [
-                "347e24f2.fad28c"
+                "347e24f2.fad28c",
+                "5b44b1bc.83ae7"
             ]
         ]
     },
@@ -1000,7 +1017,7 @@
             },
             {
                 "property": "unit_of_measurement",
-                "value": ""
+                "value": "index"
             }
         ],
         "state": "uv",
@@ -1017,11 +1034,12 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3580,
-        "y": 1380,
+        "y": 1280,
         "wires": [
             [
                 "3895eef5.ae8b72",
-                "703bfdfa.28dd74"
+                "703bfdfa.28dd74",
+                "c0b58701.097868"
             ]
         ]
     },
@@ -1061,10 +1079,11 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3600,
-        "y": 1460,
+        "y": 1360,
         "wires": [
             [
-                "b3a8e94e.5de848"
+                "b3a8e94e.5de848",
+                "250e79b2.dc1a26"
             ]
         ]
     },
@@ -1107,7 +1126,8 @@
         "y": 1580,
         "wires": [
             [
-                "c53ba2b1.ef209"
+                "c53ba2b1.ef209",
+                "aa7b79ee.369968"
             ]
         ]
     },
@@ -1139,18 +1159,22 @@
                 "value": ""
             }
         ],
-        "state": "payload",
+        "state": "payload.serial_number",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3590,
-        "y": 2060,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 1750,
+        "y": 2180,
         "wires": [
             [
-                "6254bf5.ebeed4"
+                "6254bf5.ebeed4",
+                "f85ee621.d27b08"
             ]
         ]
     },
@@ -1182,18 +1206,22 @@
                 "value": ""
             }
         ],
-        "state": "payload",
+        "state": "payload.serial_number",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3580,
-        "y": 2460,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 1740,
+        "y": 2540,
         "wires": [
             [
-                "9b8ada6e.1a71b8"
+                "9b8ada6e.1a71b8",
+                "5aea135c.79c64c"
             ]
         ]
     },
@@ -1232,11 +1260,12 @@
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 4280,
-        "y": 2080,
+        "x": 3360,
+        "y": 2180,
         "wires": [
             [
-                "4b452e58.42caf"
+                "4b452e58.42caf",
+                "7cb6aaf5.29b444"
             ]
         ]
     },
@@ -1275,11 +1304,12 @@
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 4270,
-        "y": 2140,
+        "x": 3350,
+        "y": 2240,
         "wires": [
             [
-                "d2b33f20.c6fbf"
+                "d2b33f20.c6fbf",
+                "397ad28.0674b2e"
             ]
         ]
     },
@@ -1318,11 +1348,12 @@
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 4290,
-        "y": 2200,
+        "x": 3370,
+        "y": 2300,
         "wires": [
             [
-                "b2d4eee3.74ef4"
+                "b2d4eee3.74ef4",
+                "7ec009c6.86e468"
             ]
         ]
     },
@@ -1361,11 +1392,12 @@
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 4280,
-        "y": 2260,
+        "x": 3360,
+        "y": 2360,
         "wires": [
             [
-                "105bf7d1.084a88"
+                "105bf7d1.084a88",
+                "5fc9fb75.56bab4"
             ]
         ]
     },
@@ -1404,11 +1436,12 @@
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 4290,
-        "y": 2320,
+        "x": 3370,
+        "y": 2420,
         "wires": [
             [
-                "dec13a9c.7a2248"
+                "dec13a9c.7a2248",
+                "19605fad.11b4d"
             ]
         ]
     },
@@ -1447,11 +1480,12 @@
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 4270,
-        "y": 2380,
+        "x": 3350,
+        "y": 2480,
         "wires": [
             [
-                "d19f4533.f2b7f8"
+                "d19f4533.f2b7f8",
+                "b435a42e.2ecdf8"
             ]
         ]
     },
@@ -1490,11 +1524,12 @@
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 4260,
-        "y": 2440,
+        "x": 3340,
+        "y": 2540,
         "wires": [
             [
-                "1e196341.bb5bfd"
+                "1e196341.bb5bfd",
+                "414f0b98.c32cd4"
             ]
         ]
     },
@@ -1533,11 +1568,12 @@
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 4250,
-        "y": 2500,
+        "x": 3330,
+        "y": 2600,
         "wires": [
             [
-                "78e38e12.84338"
+                "78e38e12.84338",
+                "be02a3bd.42372"
             ]
         ]
     },
@@ -1576,11 +1612,12 @@
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 4260,
-        "y": 2560,
+        "x": 3340,
+        "y": 2660,
         "wires": [
             [
-                "569c18c7.a4d368"
+                "569c18c7.a4d368",
+                "7ce706f6.61bf58"
             ]
         ]
     },
@@ -1589,13 +1626,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Beaufort Calculus",
-        "func": "msg.bf = Math.round(Math.cbrt(Math.pow(msg.payload,2)/9));\nreturn msg;",
+        "func": "bf = Math.round(Math.cbrt(Math.pow(msg.payload,2)/9));\nmsg.bf = bf;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 2990,
-        "y": 300,
+        "y": 200,
         "wires": [
             [
                 "e65622e3.4b513"
@@ -1627,7 +1664,7 @@
             },
             {
                 "property": "unit_of_measurement",
-                "value": ""
+                "value": "index"
             }
         ],
         "state": "bf",
@@ -1644,11 +1681,12 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3600,
-        "y": 300,
+        "y": 200,
         "wires": [
             [
                 "a2367f21.5bebc",
-                "12792260.53399e"
+                "12792260.53399e",
+                "60b31872.53a488"
             ]
         ]
     },
@@ -1663,7 +1701,7 @@
         "initialize": "",
         "finalize": "",
         "x": 3130,
-        "y": 1180,
+        "y": 1080,
         "wires": [
             [
                 "25e548c9.8b7808"
@@ -1706,10 +1744,11 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3590,
-        "y": 1180,
+        "y": 1080,
         "wires": [
             [
-                "77e87827.7b4ae8"
+                "77e87827.7b4ae8",
+                "a37bece.a3eaf1"
             ]
         ]
     },
@@ -1724,7 +1763,7 @@
         "initialize": "",
         "finalize": "",
         "x": 3110,
-        "y": 1100,
+        "y": 1000,
         "wires": [
             [
                 "14b65789.bc2658"
@@ -1773,11 +1812,12 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3590,
-        "y": 1100,
+        "y": 1000,
         "wires": [
             [
                 "9caea6dd.b74268",
-                "733184d7.90283c"
+                "733184d7.90283c",
+                "fe4e2ef0.c4d9c"
             ]
         ]
     },
@@ -1786,13 +1826,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Heat Index",
-        "func": "var temp = msg.payload[0] * 1.8 + 32;\nvar hum = msg.payload[1];\nif (msg.payload[0] >= 24)\n{\n hi = 0.5 * (temp + 61.0 + ((temp - 68.0) * 1.2) + (hum * 0.094));\n if (hi > 79) \n   {\n    hi = -42.379 + 2.04901523 * temp + 10.14333127 * hum + -0.22475541 * temp * hum + -0.00683783 * Math.pow(temp, 2) + -0.05481717 * Math.pow(hum, 2) + 0.00122874 * Math.pow(temp, 2) * hum + 0.00085282 * temp * Math.pow(hum, 2) + -0.00000199 * Math.pow(temp, 2) * Math.pow(hum, 2);\n    if((hum < 13) && (temp >= 80.0) && (temp <= 112.0))\n      hi -= ((13.0 - hum) * 0.25) * Math.sqrt((17.0 - Math.abs(temp - 95.0)) * 0.05882);\n    else if((hum > 85.0) && (temp >= 80.0) && (temp <= 87.0))\n       hi += ((hum - 85.0) * 0.1) * ((87.0 - temp) * 0.2);\n   }\n msg.hi = Number(((hi - 32) / 1.8).toFixed(1));\n}\nelse\n{\n msg.hi = \"n.d.\";\n}\nreturn msg;",
+        "func": "var temp = msg.payload[0] * 1.8 + 32;\nvar hum = msg.payload[1];\nif (msg.payload[0] >= 24)\n{\n hi = 0.5 * (temp + 61.0 + ((temp - 68.0) * 1.2) + (hum * 0.094));\n if (hi > 79) \n   {\n    hi = -42.379 + 2.04901523 * temp + 10.14333127 * hum + -0.22475541 * temp * hum + -0.00683783 * Math.pow(temp, 2) + -0.05481717 * Math.pow(hum, 2) + 0.00122874 * Math.pow(temp, 2) * hum + 0.00085282 * temp * Math.pow(hum, 2) + -0.00000199 * Math.pow(temp, 2) * Math.pow(hum, 2);\n    if((hum < 13) && (temp >= 80.0) && (temp <= 112.0))\n      hi -= ((13.0 - hum) * 0.25) * Math.sqrt((17.0 - Math.abs(temp - 95.0)) * 0.05882);\n    else if((hum > 85.0) && (temp >= 80.0) && (temp <= 87.0))\n       hi += ((hum - 85.0) * 0.1) * ((87.0 - temp) * 0.2);\n   }\n msg.hi = Number(((hi - 32) / 1.8).toFixed(1));\n}\nelse\n{\n msg.hi = 0;\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 3110,
-        "y": 1000,
+        "y": 900,
         "wires": [
             [
                 "579b1f0.cce8ae"
@@ -1841,11 +1881,12 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3600,
-        "y": 1000,
+        "y": 900,
         "wires": [
             [
                 "2d075b48.48dbe4",
-                "abc58eea.fa4c8"
+                "abc58eea.fa4c8",
+                "62ea7ddc.d6f614"
             ]
         ]
     },
@@ -1854,13 +1895,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Wind Chill - Old Formula",
-        "func": "var W = msg.payload[0];\nvar T = msg.payload[1];\nvar a = Math.sqrt(W);\nWCI = 33 - (33 - T) * (0.474266 + 0.453843 * a - 0.0453843 * W);\nmsg.payload = Number(WCI.toFixed(1));\nreturn msg;",
+        "func": "var W = msg.payload[0];\nvar T = msg.payload[1];\nvar a = Math.sqrt(W);\nWCI = 33 - (33 - T) * (0.474266 + 0.453843 * a - 0.0453843 * W);\nmsg.wci = Number(WCI.toFixed(1));\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 3150,
-        "y": 500,
+        "y": 400,
         "wires": [
             [
                 "9e603724.3ff218"
@@ -1872,13 +1913,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Wind Chill - New Formula",
-        "func": "var W = msg.payload[0];\nvar Ta = msg.payload[1];\nvar a = Math.pow(W, 0.16);\nWCI = (13.12 + 0.6215 * Ta) - (11.37 * a) + (0.3965 * Ta * a);\nif (W < 3.7)\n{\n msg.wci = \"n.d.\";\n}\nelse\n{\n msg.wci = Number(WCI.toFixed(1));\n}\nreturn msg;",
+        "func": "var W = msg.payload[0];\nvar Ta = msg.payload[1];\nvar a = Math.pow(W, 0.16);\nWCI = (13.12 + 0.6215 * Ta) - (11.37 * a) + (0.3965 * Ta * a);\nif (W < 3.7)\n{\n msg.w = -1;\n msg.wci = 0;\n}\nelse\n{\n msg.w = 0;\n msg.wci = Number(WCI.toFixed(1));\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 3150,
-        "y": 400,
+        "y": 300,
         "wires": [
             [
                 "b778281.aa2efd8"
@@ -1927,11 +1968,12 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3580,
-        "y": 400,
+        "y": 300,
         "wires": [
             [
                 "f63cc653.250788",
-                "ac07dc1f.ea25d"
+                "ac07dc1f.ea25d",
+                "e6e07ae4.d5e5c8"
             ]
         ]
     },
@@ -1940,13 +1982,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Humidex",
-        "func": "var Ta = msg.payload[0];\nvar UR = msg.payload[1];\nif (Ta < 20)\n{\n msg.udx = \"n.d.\";\n}\nelse\n{\n k1 = Math.pow(10, (7.5 * Ta / (237.7 + Ta)));\n k = 6.112 * k1 * UR / 100;\n Umidex = 1 * Ta + 0.5555 * (k - 10);\n msg.udx = Number(Umidex.toFixed(1));\n}\nreturn msg;",
+        "func": "var Ta = msg.payload[0];\nvar UR = msg.payload[1];\nif (Ta < 20)\n{\n msg.udx = 0;\n}\nelse\n{\n k1 = Math.pow(10, (7.5 * Ta / (237.7 + Ta)));\n k = 6.112 * k1 * UR / 100;\n Umidex = 1 * Ta + 0.5555 * (k - 10);\n msg.udx = Number(Umidex.toFixed(1));\n}\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 3100,
-        "y": 900,
+        "y": 800,
         "wires": [
             [
                 "800c9282.2caab"
@@ -1995,11 +2037,12 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3580,
-        "y": 900,
+        "y": 800,
         "wires": [
             [
                 "409796a8.537c38",
-                "1a3e346b.275c4c"
+                "1a3e346b.275c4c",
+                "9626810f.7e653"
             ]
         ]
     },
@@ -2016,8 +2059,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3410,
-        "y": 2260,
+        "x": 2030,
+        "y": 2420,
         "wires": []
     },
     {
@@ -2059,7 +2102,8 @@
         "y": 1700,
         "wires": [
             [
-                "2fd84226.67ad2e"
+                "2fd84226.67ad2e",
+                "2d12dea0.9a8382"
             ]
         ]
     },
@@ -2074,7 +2118,7 @@
         "initialize": "",
         "finalize": "",
         "x": 3120,
-        "y": 700,
+        "y": 600,
         "wires": [
             [
                 "99789621.984ec8"
@@ -2086,13 +2130,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "Wind Cardinal RT",
-        "func": "deg = msg.dirrt;\nvar dir = \"\";\n  if (deg>11.25 && deg<=33.75)\n  {\n    dir = \"NNE\";\n  }\n  else if (deg>33.75 && deg<=56.25)\n  {\n    dir = \"ENE\";\n  }\n  else if (deg>56.25 && deg<=78.75)\n  {\n    dir = \"E\";\n  }\n  else if (deg>78.75 && deg<=101.25)\n  {\n    dir = \"ESE\";\n  }\n  else if (deg>101.25 && deg<=123.75)\n  {\n    dir = \"ESE\";\n  }\n  else if (deg>123.75 && deg<=146.25)\n  {\n    dir = \"SE\";\n  }\n  else if (deg>146.25 && deg<=168.75)\n  {\n    dir = \"SSE\";\n  }\n  else if (deg>168.75 && deg<=191.25)\n  {\n    dir = \"S\";\n  }\n  else if (deg>191.25 && deg<=213.75)\n  {\n    dir = \"SSW\";\n  }\n  else if (deg>213.75 && deg<=236.25)\n  {\n    dir = \"SW\";\n  }\n  else if (deg>236.25 && deg<=258.75)\n  {\n    dir = \"WSW\";\n  }\n  else if (deg>258.75 && deg<=281.25)\n  {\n    dir = \"W\";\n  }\n  else if (deg>281.25 && deg<=303.75)\n  {\n    dir = \"WNW\";\n  }\n  else if (deg>303.75 && deg<=326.25)\n  {\n    dir = \"NW\";\n  }\n  else if (deg>326.25 && deg<=348.75)\n  {\n    dir = \"NNW\";\n  }\n  else\n  {\n    dir = \"N\"; \n  }\nmsg.payload = dir;\nreturn msg;",
+        "func": "deg = msg.payload;\nvar dir = \"\";\n  if (deg>11.25 && deg<=33.75)\n  {\n    dir = \"NNE\";\n  }\n  else if (deg>33.75 && deg<=56.25)\n  {\n    dir = \"ENE\";\n  }\n  else if (deg>56.25 && deg<=78.75)\n  {\n    dir = \"E\";\n  }\n  else if (deg>78.75 && deg<=101.25)\n  {\n    dir = \"ESE\";\n  }\n  else if (deg>101.25 && deg<=123.75)\n  {\n    dir = \"ESE\";\n  }\n  else if (deg>123.75 && deg<=146.25)\n  {\n    dir = \"SE\";\n  }\n  else if (deg>146.25 && deg<=168.75)\n  {\n    dir = \"SSE\";\n  }\n  else if (deg>168.75 && deg<=191.25)\n  {\n    dir = \"S\";\n  }\n  else if (deg>191.25 && deg<=213.75)\n  {\n    dir = \"SSW\";\n  }\n  else if (deg>213.75 && deg<=236.25)\n  {\n    dir = \"SW\";\n  }\n  else if (deg>236.25 && deg<=258.75)\n  {\n    dir = \"WSW\";\n  }\n  else if (deg>258.75 && deg<=281.25)\n  {\n    dir = \"W\";\n  }\n  else if (deg>281.25 && deg<=303.75)\n  {\n    dir = \"WNW\";\n  }\n  else if (deg>303.75 && deg<=326.25)\n  {\n    dir = \"NW\";\n  }\n  else if (deg>326.25 && deg<=348.75)\n  {\n    dir = \"NNW\";\n  }\n  else\n  {\n    dir = \"N\"; \n  }\nmsg.payload = dir;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
-        "x": 3370,
-        "y": 2000,
+        "x": 2330,
+        "y": 2040,
         "wires": [
             [
                 "e8c18dad.a414d"
@@ -2135,10 +2179,11 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3600,
-        "y": 700,
+        "y": 600,
         "wires": [
             [
-                "b1d6104d.c790c"
+                "b1d6104d.c790c",
+                "5fbb204b.b10c9"
             ]
         ]
     },
@@ -2177,11 +2222,12 @@
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3610,
-        "y": 2000,
+        "x": 2590,
+        "y": 2060,
         "wires": [
             [
-                "ad00abce.22edd8"
+                "ad00abce.22edd8",
+                "925da667.a87648"
             ]
         ]
     },
@@ -2196,7 +2242,7 @@
         "initialize": "",
         "finalize": "",
         "x": 3280,
-        "y": 300,
+        "y": 200,
         "wires": [
             [
                 "7ce1a0b3.ac9d7"
@@ -2208,13 +2254,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "WC Desc",
-        "func": "var gr = \"\";\ni = msg.wci;\n\nif (msg.wci == \"n.d.\")\n{\n  gr = \"Non Calcolabile\";\n}\nelse\n{\n if (i > 4)\n {\n  gr = \"Gradevole\";\n }\n else if (i > -6 && i <= 4)\n {\n  gr = \"Freddo\";\n }\n else if (i > -17 && i <= -7)\n {\n  gr = \"Molto Freddo\";\n }\n else if (i > -28 && i <= -17)\n {\n  gr = \"Gelido\";\n }\n else if (i > -56 && i <= -28)\n {\n  gr = \"Estremamente Freddo\";\n }\n else if (i <= -56)\n {\n  gr = \"Gelato\";\n }\n}\nmsg.state = gr;\nreturn msg;",
+        "func": "var gr = \"\";\ni = msg.wci;\n\nif (msg.w == -1)\n{\n  gr = \"Non Calcolabile\";\n}\nelse\n{\n if (i > 4)\n {\n  gr = \"Gradevole\";\n }\n else if (i > -6 && i <= 4)\n {\n  gr = \"Freddo\";\n }\n else if (i > -17 && i <= -7)\n {\n  gr = \"Molto Freddo\";\n }\n else if (i > -28 && i <= -17)\n {\n  gr = \"Gelido\";\n }\n else if (i > -56 && i <= -28)\n {\n  gr = \"Estremamente Freddo\";\n }\n else if (i <= -56)\n {\n  gr = \"Gelato\";\n }\n}\nmsg.state = gr;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 3400,
-        "y": 400,
+        "y": 300,
         "wires": [
             [
                 "755a7d1a.d6a0e4"
@@ -2226,17 +2272,18 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "WC Desc",
-        "func": "i = msg.payload;\nvar gr = \"\";\n  if (i > 10)\n  {\n    gr = \"Nessun Disagio\";\n  }\n  else if (i > -1 && i <= 10)\n  {\n    gr = \"Lieve Disagio\";\n  }\n  else if (i > -10 && i <= -1)\n  {\n    gr = \"Disagio\";\n  }\n  else if (i > -18 && i <= -10)\n  {\n    gr = \"Molto Freddo\";\n  }\n  else if (i > -29 && i <= -18)\n  {\n    gr = \"Possibile Congelamento\";\n  }\n  else if (i > -50 && i <= -29)\n  {\n    gr = \"Congelamento\";\n  }\n  else if (i <= -50)\n  {\n    gr = \"Rapido Congelamento\";\n  }\nmsg.state = gr;\nreturn msg;",
+        "func": "i = msg.wci;\nvar gr = \"\";\n  if (i > 10)\n  {\n    gr = \"Nessun Disagio\";\n  }\n  else if (i > -1 && i <= 10)\n  {\n    gr = \"Lieve Disagio\";\n  }\n  else if (i > -10 && i <= -1)\n  {\n    gr = \"Disagio\";\n  }\n  else if (i > -18 && i <= -10)\n  {\n    gr = \"Molto Freddo\";\n  }\n  else if (i > -29 && i <= -18)\n  {\n    gr = \"Possibile Congelamento\";\n  }\n  else if (i > -50 && i <= -29)\n  {\n    gr = \"Congelamento\";\n  }\n  else if (i <= -50)\n  {\n    gr = \"Rapido Congelamento\";\n  }\nmsg.state = gr;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 3400,
-        "y": 500,
+        "y": 400,
         "wires": [
             [
                 "b420f7e0.f38518",
-                "dc56f292.b6c7"
+                "dc56f292.b6c7",
+                "2152d516.3b77ea"
             ]
         ]
     },
@@ -2245,13 +2292,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "HI Desc",
-        "func": "i = msg.hi;\nvar gr = \"\";\n  if (i < 27)\n  {\n    gr = \"Confortevole\";\n  }\n  else if (i >= 27 && i <= 32)\n  {\n    gr = \"Caldo\";\n  }\n  else if (i > 32 && i <= 39)\n  {\n    gr = \"Molto Caldo\";\n  }\n  else if (i > 39 && i <= 54)\n  {\n    gr = \"Attenzione\";\n  }\n  else if (i > 54)\n  {\n    gr = \"Pericolo\";\n  }\n  else if (i == \"n.d.\")\n  {\n    gr = \"Non Calcolabile\";\n  }\nmsg.state = gr;\nreturn msg;",
+        "func": "i = msg.hi;\nvar gr = \"\";\n  if (i < 27 && i != 0)\n  {\n    gr = \"Confortevole\";\n  }\n  else if (i >= 27 && i <= 32)\n  {\n    gr = \"Caldo\";\n  }\n  else if (i > 32 && i <= 39)\n  {\n    gr = \"Molto Caldo\";\n  }\n  else if (i > 39 && i <= 54)\n  {\n    gr = \"Attenzione\";\n  }\n  else if (i > 54)\n  {\n    gr = \"Pericolo\";\n  }\n  else if (i == 0)\n  {\n    gr = \"Non Calcolabile\";\n  }\nmsg.state = gr;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 3340,
-        "y": 1000,
+        "y": 900,
         "wires": [
             [
                 "6b4c64d8.dca50c"
@@ -2263,13 +2310,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "H Desc",
-        "func": "i = msg.udx;\nvar gr = \"\";\nif (i == \"n.d.\")\n{\n  gr = \"Non Calcolabile\";\n}\nelse if (i >= 20 && i < 27)\n{\n  gr = \"Benessere\";\n}\nelse if (i >= 27 && i < 30)\n{\n  gr = \"Cautela\";\n}\nelse if (i >= 30 && i < 40)\n{\n  gr = \"Estrema Cautela\";\n}\nelse if (i >= 40 && i < 55)\n{  \n  gr = \"Pericolo\";\n}\nelse if (i >= 55)\n{\n  gr = \"Elevato Pericolo\";\n}\nmsg.state = gr;\nreturn msg;",
+        "func": "i = msg.udx;\nvar gr = \"\";\nif (i == 0)\n{\n  gr = \"Non Calcolabile\";\n}\nelse if (i >= 20 && i < 27)\n{\n  gr = \"Benessere\";\n}\nelse if (i >= 27 && i < 30)\n{\n  gr = \"Cautela\";\n}\nelse if (i >= 30 && i < 40)\n{\n  gr = \"Estrema Cautela\";\n}\nelse if (i >= 40 && i < 55)\n{  \n  gr = \"Pericolo\";\n}\nelse if (i >= 55)\n{\n  gr = \"Elevato Pericolo\";\n}\nmsg.state = gr;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 3340,
-        "y": 900,
+        "y": 800,
         "wires": [
             [
                 "f71defa8.49a07"
@@ -2287,7 +2334,7 @@
         "initialize": "",
         "finalize": "",
         "x": 3240,
-        "y": 1520,
+        "y": 1420,
         "wires": [
             [
                 "9cb5f7e5.daf6a8"
@@ -2299,7 +2346,7 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "battery_level",
-        "func": "xMax = 100;\nxMin = 1;\nyMax = 3.30;\nyMin = 2.30;\nvar n = msg.volt;\n\nvar percent = (n - yMin) / (yMax - yMin);\nvar val = Math.round(percent * (xMax - xMin) + xMin);\n\nif (val < 0)\n  {\n    val = 0;\n  }\nelse if (val > 100)\n  {\n    val = 100;\n  }\nmsg.batperc = val;\nreturn msg;",
+        "func": "xMax = 100;\nxMin = 1;\nyMax = 3.00;\nyMin = 2.30;\nvar n = msg.volt;\n\nvar percent = (n - yMin) / (yMax - yMin);\nvar val = Math.round(percent * (xMax - xMin) + xMin);\n\nif (val < 0)\n  {\n    val = 0;\n  }\nelse if (val > 100)\n  {\n    val = 100;\n  }\nmsg.batperc = val;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -2324,7 +2371,7 @@
         "initialize": "",
         "finalize": "",
         "x": 3340,
-        "y": 1100,
+        "y": 1000,
         "wires": [
             [
                 "e0dda310.d0fd"
@@ -2336,13 +2383,13 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "UV Desc",
-        "func": "i = msg.uv\nvar uv = \"\";\n\nif (i < 3)\n  {\n    uv = \"Bassa\";\n  }\nelse if (i >= 3 && i <= 5)\n  {\n    uv = \"Moderata\";\n  }\nelse if (i > 5 && i <= 7)\n  {\n    uv = \"Alta\";\n  }\nelse if (i > 7 && i <= 10)\n  {\n    uv = \"Molto Alta\";\n  }\nelse if (i > 10)\n  {\n    uv = \"Estrema\";\n  }\nmsg.uvi = uv;\nreturn msg;",
+        "func": "i = msg.uv\nvar uvi = \"\";\n\nif (i < 3)\n  {\n    uvi = \"Bassa\";\n  }\nelse if (i >= 3 && i <= 5)\n  {\n    uvi = \"Moderata\";\n  }\nelse if (i > 5 && i <= 7)\n  {\n    uvi = \"Alta\";\n  }\nelse if (i > 7 && i <= 10)\n  {\n    uvi = \"Molto Alta\";\n  }\nelse if (i > 10)\n  {\n    uvi = \"Estrema\";\n  }\nmsg.uvi = uvi;\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "x": 3220,
-        "y": 1380,
+        "y": 1280,
         "wires": [
             [
                 "3bf62651.68840a"
@@ -2391,24 +2438,6 @@
         "wires": []
     },
     {
-        "id": "148bb70d.367459",
-        "type": "function",
-        "z": "19cef663.c9958a",
-        "name": "precip_accum_local_day",
-        "func": "msg.payload = Number((msg.payload).toFixed(1));\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 3070,
-        "y": 3180,
-        "wires": [
-            [
-                "4e71128e.ada3ec"
-            ]
-        ]
-    },
-    {
         "id": "df12a4a9.bfacb8",
         "type": "debug",
         "z": "19cef663.c9958a",
@@ -2421,99 +2450,9 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1800,
-        "y": 3380,
+        "x": 1820,
+        "y": 3320,
         "wires": []
-    },
-    {
-        "id": "8a2dd918.2334e8",
-        "type": "function",
-        "z": "19cef663.c9958a",
-        "name": "lightning_strike_last_epoch",
-        "func": "msg.payload = msg.payload.toString();\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 3080,
-        "y": 3300,
-        "wires": [
-            [
-                "b7291c5d.4c69a"
-            ]
-        ]
-    },
-    {
-        "id": "4c493608.a79008",
-        "type": "function",
-        "z": "19cef663.c9958a",
-        "name": "lightning_strike_last_distance",
-        "func": "msg.payload = Number((msg.payload).toFixed(1));\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 3080,
-        "y": 3360,
-        "wires": [
-            [
-                "523ac842.04f308"
-            ]
-        ]
-    },
-    {
-        "id": "d81befbc.4f421",
-        "type": "function",
-        "z": "19cef663.c9958a",
-        "name": "latitude",
-        "func": "msg.payload = Number((msg.payload).toFixed(5));\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 3300,
-        "y": 3000,
-        "wires": [
-            [
-                "a06e3db0.cf6b6"
-            ]
-        ]
-    },
-    {
-        "id": "952bb0e7.9dd97",
-        "type": "function",
-        "z": "19cef663.c9958a",
-        "name": "longitude",
-        "func": "msg.payload = Number((msg.payload).toFixed(5));\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 3300,
-        "y": 3060,
-        "wires": [
-            [
-                "bf10a078.282f2"
-            ]
-        ]
-    },
-    {
-        "id": "470457d3.3c5618",
-        "type": "function",
-        "z": "19cef663.c9958a",
-        "name": "elevation",
-        "func": "msg.payload = Number((msg.payload).toFixed(1));\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "x": 3300,
-        "y": 3120,
-        "wires": [
-            [
-                "8c48b902.74d568"
-            ]
-        ]
     },
     {
         "id": "4e71128e.ada3ec",
@@ -2543,18 +2482,22 @@
                 "value": "mm"
             }
         ],
-        "state": "payload",
+        "state": "payload.precip_accum_local_day",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3640,
-        "y": 3180,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2340,
+        "y": 3420,
         "wires": [
             [
-                "b9931455.91c868"
+                "b9931455.91c868",
+                "1adb50bc.2be44f"
             ]
         ]
     },
@@ -2586,104 +2529,22 @@
                 "value": "min"
             }
         ],
-        "state": "payload",
+        "state": "payload.precip_minutes_local_day",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3630,
-        "y": 3240,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2330,
+        "y": 3480,
         "wires": [
             [
-                "15787b14.4f8d05"
-            ]
-        ]
-    },
-    {
-        "id": "a3357119.1ec88",
-        "type": "ha-entity",
-        "z": "19cef663.c9958a",
-        "name": "Ultimo Fulmine Caduto",
-        "server": "419830c5.54d54",
-        "version": 1,
-        "debugenabled": false,
-        "outputs": 1,
-        "entityType": "sensor",
-        "config": [
-            {
-                "property": "name",
-                "value": "Tempest - Ultimo Fulmine Caduto"
-            },
-            {
-                "property": "device_class",
-                "value": ""
-            },
-            {
-                "property": "icon",
-                "value": "mdi:calendar-clock"
-            },
-            {
-                "property": "unit_of_measurement",
-                "value": ""
-            }
-        ],
-        "state": "date",
-        "stateType": "msg",
-        "attributes": [],
-        "resend": true,
-        "outputLocation": "",
-        "outputLocationType": "none",
-        "inputOverride": "allow",
-        "x": 3630,
-        "y": 3300,
-        "wires": [
-            [
-                "93369a68.d1e788"
-            ]
-        ]
-    },
-    {
-        "id": "523ac842.04f308",
-        "type": "ha-entity",
-        "z": "19cef663.c9958a",
-        "name": "Distanza Ultimo Fulmine",
-        "server": "419830c5.54d54",
-        "version": 1,
-        "debugenabled": false,
-        "outputs": 1,
-        "entityType": "sensor",
-        "config": [
-            {
-                "property": "name",
-                "value": "Tempest - Distanza Ultimo Fulmine"
-            },
-            {
-                "property": "device_class",
-                "value": ""
-            },
-            {
-                "property": "icon",
-                "value": "mdi:map-marker-distance"
-            },
-            {
-                "property": "unit_of_measurement",
-                "value": "km"
-            }
-        ],
-        "state": "payload",
-        "stateType": "msg",
-        "attributes": [],
-        "resend": true,
-        "outputLocation": "",
-        "outputLocationType": "none",
-        "inputOverride": "allow",
-        "x": 3630,
-        "y": 3360,
-        "wires": [
-            [
-                "78ed846.822107c"
+                "15787b14.4f8d05",
+                "f314332f.83948"
             ]
         ]
     },
@@ -2715,43 +2576,22 @@
                 "value": ""
             }
         ],
-        "state": "payload",
+        "state": "payload.pressure_trend",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3060,
-        "y": 3560,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2320,
+        "y": 3740,
         "wires": [
             [
-                "5d2330b4.d2cdb"
-            ]
-        ]
-    },
-    {
-        "id": "b7291c5d.4c69a",
-        "type": "moment",
-        "z": "19cef663.c9958a",
-        "name": "",
-        "topic": "",
-        "input": "payload",
-        "inputType": "msg",
-        "inTz": "Europe/Rome",
-        "adjAmount": "1",
-        "adjType": "hours",
-        "adjDir": "add",
-        "format": "fromNow",
-        "locale": "it_IT",
-        "output": "date",
-        "outputType": "msg",
-        "outTz": "Europe/Rome",
-        "x": 3360,
-        "y": 3300,
-        "wires": [
-            [
-                "a3357119.1ec88"
+                "5d2330b4.d2cdb",
+                "b3e0844d.b25858"
             ]
         ]
     },
@@ -2783,18 +2623,22 @@
                 "value": ""
             }
         ],
-        "state": "payload",
+        "state": "payload.station_name",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3600,
-        "y": 2880,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2300,
+        "y": 2900,
         "wires": [
             [
-                "59bb9324.fe873c"
+                "59bb9324.fe873c",
+                "98e080d0.692c1"
             ]
         ]
     },
@@ -2826,18 +2670,22 @@
                 "value": ""
             }
         ],
-        "state": "payload",
+        "state": "payload.public_name",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3630,
-        "y": 2940,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2330,
+        "y": 2960,
         "wires": [
             [
-                "3c18970c.5015c8"
+                "3c18970c.5015c8",
+                "31beedb5.334582"
             ]
         ]
     },
@@ -2869,18 +2717,22 @@
                 "value": ""
             }
         ],
-        "state": "payload",
+        "state": "payload.latitude",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3610,
-        "y": 3000,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2310,
+        "y": 3020,
         "wires": [
             [
-                "e22c2f6c.b123a"
+                "e22c2f6c.b123a",
+                "ee1e833f.07312"
             ]
         ]
     },
@@ -2912,18 +2764,22 @@
                 "value": ""
             }
         ],
-        "state": "payload",
+        "state": "payload.longitude",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3620,
-        "y": 3060,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2320,
+        "y": 3080,
         "wires": [
             [
-                "cdf08c03.a0b1b"
+                "cdf08c03.a0b1b",
+                "d2013951.f1f528"
             ]
         ]
     },
@@ -2955,18 +2811,22 @@
                 "value": ""
             }
         ],
-        "state": "payload",
+        "state": "payload.elevation",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3620,
-        "y": 3120,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2320,
+        "y": 3140,
         "wires": [
             [
-                "8258d112.cfb39"
+                "8258d112.cfb39",
+                "9d7b1d67.c26ce"
             ]
         ]
     },
@@ -2984,7 +2844,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3870,
-        "y": 380,
+        "y": 280,
         "wires": []
     },
     {
@@ -3001,7 +2861,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3860,
-        "y": 220,
+        "y": 120,
         "wires": []
     },
     {
@@ -3013,12 +2873,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "windrt",
+        "complete": "payload",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3870,
-        "y": 1880,
+        "x": 2830,
+        "y": 1940,
         "wires": []
     },
     {
@@ -3030,12 +2890,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "lull",
+        "complete": "payload",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
         "x": 3850,
-        "y": 160,
+        "y": 60,
         "wires": []
     },
     {
@@ -3047,12 +2907,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "gust",
+        "complete": "payload",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
         "x": 3850,
-        "y": 580,
+        "y": 480,
         "wires": []
     },
     {
@@ -3069,7 +2929,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3870,
-        "y": 640,
+        "y": 540,
         "wires": []
     },
     {
@@ -3081,12 +2941,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "dirrt",
+        "complete": "payload",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3880,
-        "y": 1940,
+        "x": 2840,
+        "y": 2000,
         "wires": []
     },
     {
@@ -3098,12 +2958,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "pressure",
+        "complete": "payload",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
         "x": 3850,
-        "y": 760,
+        "y": 660,
         "wires": []
     },
     {
@@ -3120,7 +2980,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3860,
-        "y": 820,
+        "y": 720,
         "wires": []
     },
     {
@@ -3137,7 +2997,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3840,
-        "y": 880,
+        "y": 780,
         "wires": []
     },
     {
@@ -3154,7 +3014,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3850,
-        "y": 980,
+        "y": 880,
         "wires": []
     },
     {
@@ -3171,7 +3031,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3830,
-        "y": 1080,
+        "y": 980,
         "wires": []
     },
     {
@@ -3188,7 +3048,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3850,
-        "y": 1180,
+        "y": 1080,
         "wires": []
     },
     {
@@ -3205,7 +3065,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3850,
-        "y": 1240,
+        "y": 1140,
         "wires": []
     },
     {
@@ -3217,12 +3077,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "ill",
+        "complete": "lux",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
         "x": 3860,
-        "y": 1300,
+        "y": 1200,
         "wires": []
     },
     {
@@ -3239,7 +3099,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3840,
-        "y": 1360,
+        "y": 1260,
         "wires": []
     },
     {
@@ -3256,7 +3116,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3870,
-        "y": 1460,
+        "y": 1360,
         "wires": []
     },
     {
@@ -3273,7 +3133,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3850,
-        "y": 280,
+        "y": 180,
         "wires": []
     },
     {
@@ -3285,12 +3145,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "wci",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
         "x": 3870,
-        "y": 480,
+        "y": 380,
         "wires": []
     },
     {
@@ -3307,7 +3167,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3880,
-        "y": 520,
+        "y": 420,
         "wires": []
     },
     {
@@ -3324,7 +3184,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3880,
-        "y": 420,
+        "y": 320,
         "wires": []
     },
     {
@@ -3341,7 +3201,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3870,
-        "y": 320,
+        "y": 220,
         "wires": []
     },
     {
@@ -3358,7 +3218,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3870,
-        "y": 700,
+        "y": 600,
         "wires": []
     },
     {
@@ -3374,8 +3234,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3880,
-        "y": 2000,
+        "x": 2840,
+        "y": 2060,
         "wires": []
     },
     {
@@ -3392,7 +3252,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3870,
-        "y": 920,
+        "y": 820,
         "wires": []
     },
     {
@@ -3409,7 +3269,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3880,
-        "y": 1020,
+        "y": 920,
         "wires": []
     },
     {
@@ -3426,7 +3286,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3860,
-        "y": 1120,
+        "y": 1020,
         "wires": []
     },
     {
@@ -3443,7 +3303,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3850,
-        "y": 1400,
+        "y": 1300,
         "wires": []
     },
     {
@@ -3472,12 +3332,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.serial_number",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3860,
-        "y": 2060,
+        "x": 2020,
+        "y": 2180,
         "wires": []
     },
     {
@@ -3489,12 +3349,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.serial_number",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3840,
-        "y": 2460,
+        "x": 2000,
+        "y": 2540,
         "wires": []
     },
     {
@@ -3709,7 +3569,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1910,
+        "x": 1790,
         "y": 1100,
         "wires": [
             [
@@ -3728,7 +3588,7 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 2140,
+        "x": 2080,
         "y": 1100,
         "wires": [
             [
@@ -3757,7 +3617,7 @@
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 2870,
-        "y": 1040,
+        "y": 940,
         "wires": [
             [
                 "31ae7faa.afcc3",
@@ -3788,7 +3648,7 @@
         "reduceInitType": "",
         "reduceFixup": "",
         "x": 2890,
-        "y": 440,
+        "y": 340,
         "wires": [
             [
                 "687b31e9.02001",
@@ -3815,244 +3675,13 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 2080,
-        "y": 1900,
+        "x": 1780,
+        "y": 1940,
         "wires": [
             [
-                "55fe7c7f.957904"
-            ]
-        ]
-    },
-    {
-        "id": "f47cfd00.2dc29",
-        "type": "switch",
-        "z": "19cef663.c9958a",
-        "name": "Metrics Realtime",
-        "property": "parts.index",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "0",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "1",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "2",
-                "vt": "num"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 3,
-        "x": 2790,
-        "y": 1900,
-        "wires": [
-            [],
-            [
-                "f03b367.1c5c8c8"
-            ],
-            [
+                "f03b367.1c5c8c8",
                 "e3df819.767148"
             ]
-        ],
-        "outputLabels": [
-            "Time Epoch",
-            "Wind Speed RT (m/s)",
-            "Wind Direction RT (deg)"
-        ]
-    },
-    {
-        "id": "55fe7c7f.957904",
-        "type": "split",
-        "z": "19cef663.c9958a",
-        "name": "Metrics RT Array Splitter",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": "1",
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "x": 2430,
-        "y": 1900,
-        "wires": [
-            [
-                "f47cfd00.2dc29"
-            ]
-        ]
-    },
-    {
-        "id": "2847ae09.8f5b82",
-        "type": "switch",
-        "z": "19cef663.c9958a",
-        "name": "Tempest PWS Status",
-        "property": "parts.index",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "0",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "4",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "5",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "6",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "7",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "9",
-                "vt": "num"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 6,
-        "x": 2900,
-        "y": 2120,
-        "wires": [
-            [
-                "7a31e985.f62d98"
-            ],
-            [],
-            [],
-            [
-                "76fb4846.e8fcf8"
-            ],
-            [
-                "ce69c028.22ccf"
-            ],
-            [
-                "7ea2ea8a.501584"
-            ]
-        ],
-        "outputLabels": [
-            "Tempest Station S/N",
-            "Uptime (s)",
-            "Battery (V)",
-            "Tempest Firmware",
-            "Tempest RSSI",
-            "Sensor Status (bin)"
-        ]
-    },
-    {
-        "id": "a0f83bae.c5bd58",
-        "type": "split",
-        "z": "19cef663.c9958a",
-        "name": "Payload Splitter",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": "1",
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "x": 2060,
-        "y": 2120,
-        "wires": [
-            [
-                "2847ae09.8f5b82"
-            ]
-        ]
-    },
-    {
-        "id": "4b8389de.9863f8",
-        "type": "split",
-        "z": "19cef663.c9958a",
-        "name": "Payload Splitter",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": "1",
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "x": 2060,
-        "y": 2560,
-        "wires": [
-            [
-                "1daa604b.405ed"
-            ]
-        ]
-    },
-    {
-        "id": "1daa604b.405ed",
-        "type": "switch",
-        "z": "19cef663.c9958a",
-        "name": "Tempest HUB Status",
-        "property": "parts.index",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "0",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "2",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "3",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "4",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "11",
-                "vt": "num"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 5,
-        "x": 2900,
-        "y": 2560,
-        "wires": [
-            [
-                "87d68520.4d4aa8"
-            ],
-            [
-                "c578be80.1757d"
-            ],
-            [],
-            [
-                "453c40d4.658da"
-            ],
-            [
-                "65c251ca.058d2"
-            ]
-        ],
-        "outputLabels": [
-            "HUB S/N",
-            "HUB Firmware",
-            "Uptime (s)",
-            "HUB RSSI",
-            "IP Address"
         ]
     },
     {
@@ -4064,12 +3693,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.firmware_revision",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3840,
-        "y": 2520,
+        "x": 2000,
+        "y": 2600,
         "wires": []
     },
     {
@@ -4081,12 +3710,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.firmware_revision",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3860,
-        "y": 2120,
+        "x": 2020,
+        "y": 2240,
         "wires": []
     },
     {
@@ -4098,12 +3727,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.rssi",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3860,
-        "y": 2180,
+        "x": 2020,
+        "y": 2300,
         "wires": []
     },
     {
@@ -4115,12 +3744,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.rssi",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3850,
-        "y": 2580,
+        "x": 2010,
+        "y": 2660,
         "wires": []
     },
     {
@@ -4154,7 +3783,7 @@
         "statusVal": "",
         "statusType": "auto",
         "x": 3840,
-        "y": 1520,
+        "y": 1420,
         "wires": []
     },
     {
@@ -4176,361 +3805,22 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1760,
-        "y": 3320,
+        "x": 1800,
+        "y": 3660,
         "wires": [
             [
-                "515d1f66.64cb7"
+                "a3c8d22e.090b8",
+                "4e71128e.ada3ec",
+                "35c885a7.af010a",
+                "afede312.5a83e",
+                "1e0a08e1.78ae27",
+                "e7b82d2e.b60d1",
+                "80a31981.64b4d8",
+                "478dff97.b60c6",
+                "dc390612.c4ccc8",
+                "f8929694.dd1c58",
+                "b9d66e3a.66877"
             ]
-        ]
-    },
-    {
-        "id": "515d1f66.64cb7",
-        "type": "split",
-        "z": "19cef663.c9958a",
-        "name": "Metrics Array Splitter",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": "1",
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "x": 1960,
-        "y": 3320,
-        "wires": [
-            [
-                "105685e2.2948da"
-            ]
-        ]
-    },
-    {
-        "id": "251293be.475dec",
-        "type": "switch",
-        "z": "19cef663.c9958a",
-        "name": "API Metrics",
-        "property": "parts.index",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "0",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "1",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "2",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "3",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "4",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "5",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "6",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "7",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "8",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "9",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "10",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "11",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "12",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "13",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "14",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "15",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "16",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "17",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "18",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "19",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "20",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "21",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "22",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "23",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "24",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "25",
-                "vt": "num"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 26,
-        "x": 2610,
-        "y": 3320,
-        "wires": [
-            [],
-            [],
-            [],
-            [],
-            [],
-            [
-                "148bb70d.367459"
-            ],
-            [],
-            [
-                "35c885a7.af010a"
-            ],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [],
-            [
-                "8a2dd918.2334e8"
-            ],
-            [
-                "4c493608.a79008"
-            ],
-            [
-                "afede312.5a83e"
-            ],
-            [
-                "1e0a08e1.78ae27"
-            ],
-            [
-                "e7b82d2e.b60d1"
-            ],
-            [],
-            [],
-            [],
-            [],
-            [
-                "80a31981.64b4d8"
-            ]
-        ],
-        "outputLabels": [
-            "timestamp",
-            "air_temperature",
-            "relative_humidity",
-            "precip",
-            "precip_accum_last_1hr",
-            "precip_accum_local_day",
-            "precip_accum_local_yesterday",
-            "precip_minutes_local_day",
-            "precip_minutes_local_yesterday",
-            "wind_avg",
-            "wind_direction",
-            "wind_gust",
-            "wind_lull",
-            "solar_radiation",
-            "uv",
-            "brightness",
-            "lightning_strike_last_epoch",
-            "lightning_strike_last_distance",
-            "lightning_strike_count",
-            "lightning_strike_count_last_1hr",
-            "lightning_strike_count_last_3hr",
-            "feels_like",
-            "heat_index",
-            "wind_chill",
-            "dew_point",
-            "pressure_trend"
-        ]
-    },
-    {
-        "id": "105685e2.2948da",
-        "type": "change",
-        "z": "19cef663.c9958a",
-        "name": "Split Clear",
-        "rules": [
-            {
-                "t": "delete",
-                "p": "parts.id",
-                "pt": "msg"
-            },
-            {
-                "t": "delete",
-                "p": "parts.type",
-                "pt": "msg"
-            },
-            {
-                "t": "delete",
-                "p": "parts.key",
-                "pt": "msg"
-            },
-            {
-                "t": "delete",
-                "p": "parts.count",
-                "pt": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 2170,
-        "y": 3320,
-        "wires": [
-            [
-                "251293be.475dec"
-            ]
-        ]
-    },
-    {
-        "id": "c90eaaaf.66be08",
-        "type": "switch",
-        "z": "19cef663.c9958a",
-        "name": "API Data",
-        "property": "parts.index",
-        "propertyType": "msg",
-        "rules": [
-            {
-                "t": "eq",
-                "v": "0",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "1",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "2",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "3",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "4",
-                "vt": "num"
-            },
-            {
-                "t": "eq",
-                "v": "5",
-                "vt": "num"
-            }
-        ],
-        "checkall": "true",
-        "repair": false,
-        "outputs": 6,
-        "x": 2860,
-        "y": 2960,
-        "wires": [
-            [
-                "9f46b218.6af2"
-            ],
-            [
-                "2b510db1.a3bc72"
-            ],
-            [
-                "5a3e3ad0.11e364"
-            ],
-            [
-                "d81befbc.4f421"
-            ],
-            [
-                "952bb0e7.9dd97"
-            ],
-            [
-                "470457d3.3c5618"
-            ]
-        ],
-        "outputLabels": [
-            "Station ID",
-            "Station Name",
-            "Station Public Name",
-            "Latitude",
-            "Longitude",
-            "Elevation"
         ]
     },
     {
@@ -4550,70 +3840,17 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1760,
-        "y": 2960,
+        "x": 1800,
+        "y": 3020,
         "wires": [
             [
-                "cc19008f.399c"
-            ]
-        ]
-    },
-    {
-        "id": "cc19008f.399c",
-        "type": "split",
-        "z": "19cef663.c9958a",
-        "name": "Data Array Splitter",
-        "splt": "\\n",
-        "spltType": "str",
-        "arraySplt": "1",
-        "arraySpltType": "len",
-        "stream": false,
-        "addname": "",
-        "x": 1950,
-        "y": 2960,
-        "wires": [
-            [
-                "1b7b0468.22fa4c"
-            ]
-        ]
-    },
-    {
-        "id": "1b7b0468.22fa4c",
-        "type": "change",
-        "z": "19cef663.c9958a",
-        "name": "Split Clear",
-        "rules": [
-            {
-                "t": "delete",
-                "p": "parts.count",
-                "pt": "msg"
-            },
-            {
-                "t": "delete",
-                "p": "parts.id",
-                "pt": "msg"
-            },
-            {
-                "t": "delete",
-                "p": "parts.type",
-                "pt": "msg"
-            },
-            {
-                "t": "delete",
-                "p": "parts.key",
-                "pt": "msg"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 2150,
-        "y": 2960,
-        "wires": [
-            [
-                "c90eaaaf.66be08"
+                "25018378.f6012c",
+                "9f46b218.6af2",
+                "2b510db1.a3bc72",
+                "5a3e3ad0.11e364",
+                "a06e3db0.cf6b6",
+                "bf10a078.282f2",
+                "8c48b902.74d568"
             ]
         ]
     },
@@ -4626,12 +3863,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.pressure_trend",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3890,
-        "y": 3560,
+        "x": 2850,
+        "y": 3740,
         "wires": []
     },
     {
@@ -4643,12 +3880,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.precip_accum_local_day",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3920,
-        "y": 3180,
+        "x": 2880,
+        "y": 3420,
         "wires": []
     },
     {
@@ -4660,46 +3897,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.precip_minutes_local_day",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3910,
-        "y": 3240,
-        "wires": []
-    },
-    {
-        "id": "93369a68.d1e788",
-        "type": "debug",
-        "z": "19cef663.c9958a",
-        "name": "ULTIMO FULMINE CADUTO",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 3900,
-        "y": 3300,
-        "wires": []
-    },
-    {
-        "id": "78ed846.822107c",
-        "type": "debug",
-        "z": "19cef663.c9958a",
-        "name": "DISTANZA ULTIMO FULMINE",
-        "active": false,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 3910,
-        "y": 3360,
+        "x": 2870,
+        "y": 3480,
         "wires": []
     },
     {
@@ -4711,12 +3914,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.latitude",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3850,
-        "y": 3000,
+        "x": 2810,
+        "y": 3020,
         "wires": []
     },
     {
@@ -4728,12 +3931,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.longitude",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3860,
-        "y": 3060,
+        "x": 2820,
+        "y": 3080,
         "wires": []
     },
     {
@@ -4745,12 +3948,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.elevation",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3850,
-        "y": 3120,
+        "x": 2810,
+        "y": 3140,
         "wires": []
     },
     {
@@ -4762,12 +3965,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.station_name",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3870,
-        "y": 2880,
+        "x": 2830,
+        "y": 2900,
         "wires": []
     },
     {
@@ -4779,12 +3982,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.public_name",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3910,
-        "y": 2940,
+        "x": 2870,
+        "y": 2960,
         "wires": []
     },
     {
@@ -4826,7 +4029,8 @@
         "y": 1640,
         "wires": [
             [
-                "dd19dad.dd22528"
+                "dd19dad.dd22528",
+                "e8d80fbf.c4a93"
             ]
         ]
     },
@@ -4866,10 +4070,11 @@
         "outputLocationType": "none",
         "inputOverride": "allow",
         "x": 3600,
-        "y": 1520,
+        "y": 1420,
         "wires": [
             [
-                "40d4c8d5.6b22e8"
+                "40d4c8d5.6b22e8",
+                "e92a9260.967bc"
             ]
         ]
     },
@@ -4901,18 +4106,22 @@
                 "value": ""
             }
         ],
-        "state": "payload",
+        "state": "payload.firmware_revision",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3590,
-        "y": 2120,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 1750,
+        "y": 2240,
         "wires": [
             [
-                "47dceb75.cfa3d4"
+                "47dceb75.cfa3d4",
+                "59c2b840.968088"
             ]
         ]
     },
@@ -4944,18 +4153,22 @@
                 "value": "dB"
             }
         ],
-        "state": "payload",
+        "state": "payload.rssi",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3600,
-        "y": 2180,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 1760,
+        "y": 2300,
         "wires": [
             [
-                "121848b6.6b3767"
+                "121848b6.6b3767",
+                "2421650c.56b62a"
             ]
         ]
     },
@@ -4987,18 +4200,22 @@
                 "value": ""
             }
         ],
-        "state": "payload",
+        "state": "payload.firmware_revision",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3580,
-        "y": 2520,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 1740,
+        "y": 2600,
         "wires": [
             [
-                "e8da17a6.8b3298"
+                "e8da17a6.8b3298",
+                "28836fad.7433f"
             ]
         ]
     },
@@ -5030,18 +4247,22 @@
                 "value": "dB"
             }
         ],
-        "state": "payload",
+        "state": "payload.rssi",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3580,
-        "y": 2580,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 1740,
+        "y": 2660,
         "wires": [
             [
-                "5b878faf.b5519"
+                "5b878faf.b5519",
+                "940959cd.2c2ea8"
             ]
         ]
     },
@@ -5073,18 +4294,22 @@
                 "value": ""
             }
         ],
-        "state": "payload",
+        "state": "payload.station_id",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3590,
-        "y": 2820,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2290,
+        "y": 2840,
         "wires": [
             [
-                "fdfe73b5.21646"
+                "fdfe73b5.21646",
+                "cf9e532d.6b715"
             ]
         ]
     },
@@ -5097,12 +4322,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "payload",
+        "complete": "payload.station_id",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3850,
-        "y": 2820,
+        "x": 2810,
+        "y": 2840,
         "wires": []
     },
     {
@@ -5194,7 +4419,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1550,
+        "x": 1570,
         "y": 3320,
         "wires": [
             [
@@ -5250,13 +4475,14 @@
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3600,
-        "y": 3460,
+        "x": 2880,
+        "y": 3640,
         "wires": [
             [
                 "621f5636.849118",
                 "cda4cc12.65e65",
-                "76cffbb3.719cf4"
+                "76cffbb3.719cf4",
+                "6e94e764.9df8e8"
             ]
         ]
     },
@@ -5273,8 +4499,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3870,
-        "y": 3420,
+        "x": 3090,
+        "y": 3600,
         "wires": []
     },
     {
@@ -5290,8 +4516,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3870,
-        "y": 3460,
+        "x": 3090,
+        "y": 3640,
         "wires": []
     },
     {
@@ -5307,8 +4533,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3870,
-        "y": 3500,
+        "x": 3090,
+        "y": 3680,
         "wires": []
     },
     {
@@ -5319,7 +4545,7 @@
         "rules": [
             {
                 "t": "move",
-                "p": "payload",
+                "p": "payload.lightning_strike_count",
                 "pt": "msg",
                 "to": "topic.count",
                 "tot": "msg"
@@ -5330,8 +4556,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 3050,
-        "y": 3420,
+        "x": 2380,
+        "y": 3600,
         "wires": [
             [
                 "ea2dfa19.189bd8"
@@ -5346,7 +4572,7 @@
         "rules": [
             {
                 "t": "move",
-                "p": "payload",
+                "p": "payload.lightning_strike_count_last_1hr",
                 "pt": "msg",
                 "to": "topic.1h",
                 "tot": "msg"
@@ -5357,8 +4583,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 3050,
-        "y": 3460,
+        "x": 2410,
+        "y": 3640,
         "wires": [
             [
                 "ea2dfa19.189bd8"
@@ -5373,7 +4599,7 @@
         "rules": [
             {
                 "t": "move",
-                "p": "payload",
+                "p": "payload.lightning_strike_count_last_3hr",
                 "pt": "msg",
                 "to": "topic.3h",
                 "tot": "msg"
@@ -5384,8 +4610,8 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 3050,
-        "y": 3500,
+        "x": 2410,
+        "y": 3680,
         "wires": [
             [
                 "ea2dfa19.189bd8"
@@ -5412,8 +4638,8 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 3350,
-        "y": 3460,
+        "x": 2710,
+        "y": 3640,
         "wires": [
             [
                 "53bce811.e74148"
@@ -5482,18 +4708,22 @@
                 "value": ""
             }
         ],
-        "state": "payload",
+        "state": "payload.ip",
         "stateType": "msg",
         "attributes": [],
         "resend": true,
         "outputLocation": "",
         "outputLocationType": "none",
         "inputOverride": "allow",
-        "x": 3620,
-        "y": 2640,
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 1780,
+        "y": 2720,
         "wires": [
             [
-                "ce7a52e6.6d73f"
+                "ce7a52e6.6d73f",
+                "f5fb8492.eddd98"
             ]
         ]
     },
@@ -5506,12 +4736,12 @@
         "tosidebar": true,
         "console": false,
         "tostatus": false,
-        "complete": "ip",
+        "complete": "payload.ip",
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 3850,
-        "y": 2640,
+        "x": 2010,
+        "y": 2720,
         "wires": []
     },
     {
@@ -5555,8 +4785,6 @@
             "e8c18dad.a414d",
             "4e71128e.ada3ec",
             "35c885a7.af010a",
-            "a3357119.1ec88",
-            "523ac842.04f308",
             "80a31981.64b4d8",
             "2b510db1.a3bc72",
             "5a3e3ad0.11e364",
@@ -5571,7 +4799,12 @@
             "453c40d4.658da",
             "9f46b218.6af2",
             "53bce811.e74148",
-            "65c251ca.058d2"
+            "65c251ca.058d2",
+            "ac632ac.a3e41d8",
+            "478dff97.b60c6",
+            "dc390612.c4ccc8",
+            "f8929694.dd1c58",
+            "b9d66e3a.66877"
         ],
         "x": 300,
         "y": 2540,
@@ -5595,7 +4828,7 @@
         "joinerType": "str",
         "accumulate": false,
         "timeout": "",
-        "count": "53",
+        "count": "55",
         "reduceRight": false,
         "reduceExp": "",
         "reduceInit": "",
@@ -5614,7 +4847,7 @@
         "type": "function",
         "z": "19cef663.c9958a",
         "name": "",
-        "func": "const arrayToCount = msg.status.fill;\nconst result = arrayToCount.filter(i => i === \"green\").length;\nif (result == 53)\n  {\n    msg.go = true;\n    return msg;\n  }\nelse\n  {\n    msg.go = false;\n    return msg;\n  }",
+        "func": "const arrayToCount = msg.status.fill;\nconst result = arrayToCount.filter(i => i === \"green\").length;\nif (result == 55)\n  {\n    msg.go = true;\n    return msg;\n  }\nelse\n  {\n    msg.go = false;\n    return msg;\n  }",
         "outputs": 1,
         "noerr": 0,
         "initialize": "flow.set(\"go\", false);\nreturn;",
@@ -5698,7 +4931,7 @@
         "send_stop": false,
         "default_start": false,
         "differ": false,
-        "x": 1090,
+        "x": 1110,
         "y": 1740,
         "wires": [
             [
@@ -5880,7 +5113,8 @@
         "y": 3320,
         "wires": [
             [
-                "eecca36.bd1b46"
+                "eecca36.bd1b46",
+                "87c11b43.270d58"
             ]
         ]
     },
@@ -5944,8 +5178,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 4540,
-        "y": 2080,
+        "x": 3620,
+        "y": 2180,
         "wires": []
     },
     {
@@ -5961,8 +5195,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 4530,
-        "y": 2140,
+        "x": 3610,
+        "y": 2240,
         "wires": []
     },
     {
@@ -5978,8 +5212,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 4550,
-        "y": 2200,
+        "x": 3630,
+        "y": 2300,
         "wires": []
     },
     {
@@ -5995,8 +5229,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 4540,
-        "y": 2260,
+        "x": 3620,
+        "y": 2360,
         "wires": []
     },
     {
@@ -6012,8 +5246,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 4550,
-        "y": 2320,
+        "x": 3630,
+        "y": 2420,
         "wires": []
     },
     {
@@ -6029,8 +5263,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 4530,
-        "y": 2380,
+        "x": 3610,
+        "y": 2480,
         "wires": []
     },
     {
@@ -6046,8 +5280,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 4520,
-        "y": 2440,
+        "x": 3600,
+        "y": 2540,
         "wires": []
     },
     {
@@ -6063,8 +5297,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 4510,
-        "y": 2500,
+        "x": 3590,
+        "y": 2600,
         "wires": []
     },
     {
@@ -6080,8 +5314,8 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 4530,
-        "y": 2560,
+        "x": 3610,
+        "y": 2660,
         "wires": []
     },
     {
@@ -6092,7 +5326,7 @@
         "props": [
             {
                 "p": "payload.key",
-                "v": "API-KEY",
+                "v": "YOUR API KEY",
                 "vt": "str"
             }
         ],
@@ -6117,7 +5351,7 @@
         "props": [
             {
                 "p": "payload.id",
-                "v": "STATION ID",
+                "v": "YOUR STATION ID",
                 "vt": "str"
             }
         ],
@@ -6199,6 +5433,2482 @@
         "wires": []
     },
     {
+        "id": "87c11b43.270d58",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1390,
+        "y": 3380,
+        "wires": []
+    },
+    {
+        "id": "9aed8c01.c9992",
+        "type": "comment",
+        "z": "19cef663.c9958a",
+        "name": "TEMPEST FLOW",
+        "info": "",
+        "x": 370,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "58692782.f0dc68",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Power Saving Mode",
+        "func": "var v = msg.volt;\nvar mode = \"\";\n\nif (v <= 2.355)\n  {\n    mode = \"Mode 3\";\n  }\nelse if (v > 2.355 && v <= 2.400)\n  {\n    mode = \"Mode 2\";\n  }\nelse if (v > 2.400 && v <= 2.425)\n  {\n    mode = \"Mode 1\";\n  }\nelse if (v > 2.425)\n  {\n    mode = \"Mode 0\";\n  }\nmsg.mode = mode;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 2980,
+        "y": 1500,
+        "wires": [
+            [
+                "f58279a7.4ca908"
+            ]
+        ]
+    },
+    {
+        "id": "f58279a7.4ca908",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Power Saving Description",
+        "func": "var mode = msg.mode;\nvar st = \"\";\n\nif (mode == \"Mode 0\")\n  {\n    st = \"Full Performance\";\n  }\nelse if (mode == \"Mode 1\")\n  {\n    st = \"Wind @ 6 s\";\n  }\nelse if (mode == \"Mode 2\")\n  {\n    st = \"Wind @ 1 min\";\n  }\nelse if (mode == \"Mode 3\")\n  {\n    st = \"Sensors @ 5 min, Lightning & Rain Off\";\n  }\nmsg.mode_desc = st;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 3270,
+        "y": 1500,
+        "wires": [
+            [
+                "ac632ac.a3e41d8"
+            ]
+        ]
+    },
+    {
+        "id": "48e46e60.86bdd",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "POWER SAVING MODE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "mode",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3890,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "793c4415.801bfc",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "POWER SAVING DESCRIPTION",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "mode_desc",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3910,
+        "y": 1520,
+        "wires": []
+    },
+    {
+        "id": "ac632ac.a3e41d8",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Power Saving",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Power Saving Mode"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:battery-plus"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": ""
+            }
+        ],
+        "state": "mode",
+        "stateType": "msg",
+        "attributes": [
+            {
+                "property": "Descrizione",
+                "value": "mode_desc",
+                "valueType": "msg"
+            }
+        ],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "x": 3600,
+        "y": 1500,
+        "wires": [
+            [
+                "48e46e60.86bdd",
+                "793c4415.801bfc",
+                "f8f532c6.bece9"
+            ]
+        ]
+    },
+    {
+        "id": "41453ed9.a5287",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/wind/lull",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4510,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "b29d523a.e73f4",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/wind/speed",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4520,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "6e98bdd1.03e754",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/wind/beaufort",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4530,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "60b31872.53a488",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "parts",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "bf",
+                "pt": "msg",
+                "to": "payload.beaufort",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "state",
+                "pt": "msg",
+                "to": "payload.state",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4120,
+        "y": 200,
+        "wires": [
+            [
+                "91f9e143.e603c"
+            ]
+        ]
+    },
+    {
+        "id": "91f9e143.e603c",
+        "type": "json",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": true,
+        "x": 4290,
+        "y": 200,
+        "wires": [
+            [
+                "6e98bdd1.03e754"
+            ]
+        ]
+    },
+    {
+        "id": "bb7b8e18.116c7",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/wind/windchill_new",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4550,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "e6e07ae4.d5e5c8",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "parts",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "wci",
+                "pt": "msg",
+                "to": "payload.windchill",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "state",
+                "pt": "msg",
+                "to": "payload.state",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4120,
+        "y": 300,
+        "wires": [
+            [
+                "87fa03b5.3bb96"
+            ]
+        ]
+    },
+    {
+        "id": "87fa03b5.3bb96",
+        "type": "json",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": true,
+        "x": 4290,
+        "y": 300,
+        "wires": [
+            [
+                "bb7b8e18.116c7"
+            ]
+        ]
+    },
+    {
+        "id": "57b20c7c.c2c7c4",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/wind/windchill_old",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4540,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "2152d516.3b77ea",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "parts",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "wci",
+                "pt": "msg",
+                "to": "payload.windchill",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "state",
+                "pt": "msg",
+                "to": "payload.state",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4120,
+        "y": 400,
+        "wires": [
+            [
+                "c4dce564.b331f8"
+            ]
+        ]
+    },
+    {
+        "id": "c4dce564.b331f8",
+        "type": "json",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": true,
+        "x": 4290,
+        "y": 400,
+        "wires": [
+            [
+                "57b20c7c.c2c7c4"
+            ]
+        ]
+    },
+    {
+        "id": "bdbfeec5.e6778",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/wind/gust",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4520,
+        "y": 480,
+        "wires": []
+    },
+    {
+        "id": "9aa0cd3b.79c83",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/wind/direction",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4530,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "5fbb204b.b10c9",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/wind/cardinal",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4530,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "6136853c.76221c",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/pressure/pressure",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4540,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "e353e935.ebf438",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/temperature/air",
+        "qos": "2",
+        "retain": "true",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4530,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "197a56c9.2dce29",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/bioclimatics/humidex",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4550,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "9626810f.7e653",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "parts",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "udx",
+                "pt": "msg",
+                "to": "payload.humidex",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "state",
+                "pt": "msg",
+                "to": "payload.state",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4120,
+        "y": 800,
+        "wires": [
+            [
+                "e54fb2d4.40f58"
+            ]
+        ]
+    },
+    {
+        "id": "e54fb2d4.40f58",
+        "type": "json",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": true,
+        "x": 4290,
+        "y": 800,
+        "wires": [
+            [
+                "197a56c9.2dce29"
+            ]
+        ]
+    },
+    {
+        "id": "8494ee4a.846c6",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/bioclimatics/heat_index",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4560,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "62ea7ddc.d6f614",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "parts",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "hi",
+                "pt": "msg",
+                "to": "payload.heat_index",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "state",
+                "pt": "msg",
+                "to": "payload.state",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4120,
+        "y": 900,
+        "wires": [
+            [
+                "2c6cb394.f8398c"
+            ]
+        ]
+    },
+    {
+        "id": "2c6cb394.f8398c",
+        "type": "json",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": true,
+        "x": 4290,
+        "y": 900,
+        "wires": [
+            [
+                "8494ee4a.846c6"
+            ]
+        ]
+    },
+    {
+        "id": "6cd1daaf.4ca454",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/bioclimatics/thom",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4540,
+        "y": 1000,
+        "wires": []
+    },
+    {
+        "id": "fe4e2ef0.c4d9c",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "parts",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "thi",
+                "pt": "msg",
+                "to": "payload.thom",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "state",
+                "pt": "msg",
+                "to": "payload.state",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4120,
+        "y": 1000,
+        "wires": [
+            [
+                "5df79b9f.7255c4"
+            ]
+        ]
+    },
+    {
+        "id": "5df79b9f.7255c4",
+        "type": "json",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": true,
+        "x": 4290,
+        "y": 1000,
+        "wires": [
+            [
+                "6cd1daaf.4ca454"
+            ]
+        ]
+    },
+    {
+        "id": "a37bece.a3eaf1",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "dp",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4120,
+        "y": 1080,
+        "wires": [
+            [
+                "bbfd276a.5b03d8"
+            ]
+        ]
+    },
+    {
+        "id": "bbfd276a.5b03d8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/bioclimatics/dewpoint",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4560,
+        "y": 1080,
+        "wires": []
+    },
+    {
+        "id": "24e210c1.9a0f9",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/humidity",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4510,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "5489d29c.a2b93c",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/illuminance",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4520,
+        "y": 1200,
+        "wires": []
+    },
+    {
+        "id": "5b44b1bc.83ae7",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "lux",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4120,
+        "y": 1200,
+        "wires": [
+            [
+                "5489d29c.a2b93c"
+            ]
+        ]
+    },
+    {
+        "id": "31059df4.e2df02",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/uv",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4490,
+        "y": 1280,
+        "wires": []
+    },
+    {
+        "id": "c0b58701.097868",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "parts",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "uv",
+                "pt": "msg",
+                "to": "payload.index",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "uvi",
+                "pt": "msg",
+                "to": "payload.state",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4120,
+        "y": 1280,
+        "wires": [
+            [
+                "42b97166.cf6d8"
+            ]
+        ]
+    },
+    {
+        "id": "42b97166.cf6d8",
+        "type": "json",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": true,
+        "x": 4290,
+        "y": 1280,
+        "wires": [
+            [
+                "31059df4.e2df02"
+            ]
+        ]
+    },
+    {
+        "id": "3c754cb2.2082d4",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/solar_radiation",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4530,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "250e79b2.dc1a26",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "rad",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4120,
+        "y": 1360,
+        "wires": [
+            [
+                "3c754cb2.2082d4"
+            ]
+        ]
+    },
+    {
+        "id": "7f80b96a.a7a918",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/charging_status",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4540,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "e92a9260.967bc",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "state",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4120,
+        "y": 1420,
+        "wires": [
+            [
+                "7f80b96a.a7a918"
+            ]
+        ]
+    },
+    {
+        "id": "bf86b3a8.f9778",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/power_saving",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4530,
+        "y": 1500,
+        "wires": []
+    },
+    {
+        "id": "f8f532c6.bece9",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "parts",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "mode",
+                "pt": "msg",
+                "to": "payload.mode",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "mode_desc",
+                "pt": "msg",
+                "to": "payload.state",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4160,
+        "y": 1500,
+        "wires": [
+            [
+                "5c532036.e4b29"
+            ]
+        ]
+    },
+    {
+        "id": "5c532036.e4b29",
+        "type": "json",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": true,
+        "x": 4310,
+        "y": 1500,
+        "wires": [
+            [
+                "bf86b3a8.f9778"
+            ]
+        ]
+    },
+    {
+        "id": "880ac4de.5d4f78",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/battery_perc",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4530,
+        "y": 1580,
+        "wires": []
+    },
+    {
+        "id": "aa7b79ee.369968",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "batperc",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4180,
+        "y": 1580,
+        "wires": [
+            [
+                "880ac4de.5d4f78"
+            ]
+        ]
+    },
+    {
+        "id": "470e7102.33da1",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/battery_volt",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4520,
+        "y": 1640,
+        "wires": []
+    },
+    {
+        "id": "e8d80fbf.c4a93",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "volt",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4180,
+        "y": 1640,
+        "wires": [
+            [
+                "470e7102.33da1"
+            ]
+        ]
+    },
+    {
+        "id": "8acc2468.6dab68",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/precipitation/type",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4540,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "2d12dea0.9a8382",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "rtype",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 4180,
+        "y": 1700,
+        "wires": [
+            [
+                "8acc2468.6dab68"
+            ]
+        ]
+    },
+    {
+        "id": "dd6c2419.27e318",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/wind/speed_rt",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3170,
+        "y": 1940,
+        "wires": []
+    },
+    {
+        "id": "b20c0827.966d28",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/wind/direction_rt",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3180,
+        "y": 2000,
+        "wires": []
+    },
+    {
+        "id": "925da667.a87648",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/wind/cardinal_rt",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3180,
+        "y": 2060,
+        "wires": []
+    },
+    {
+        "id": "d7495e6c.dfd36",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/station_sn",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2760,
+        "y": 2180,
+        "wires": []
+    },
+    {
+        "id": "c6529648.a691f8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/station_fw",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2760,
+        "y": 2240,
+        "wires": []
+    },
+    {
+        "id": "4e8e7913.c3e1e8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/station_rssi",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2760,
+        "y": 2300,
+        "wires": []
+    },
+    {
+        "id": "9f37b9af.94a9b8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/hub_sn",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2750,
+        "y": 2540,
+        "wires": []
+    },
+    {
+        "id": "6ee3b698.1cf568",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/hub_fw",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2750,
+        "y": 2600,
+        "wires": []
+    },
+    {
+        "id": "feb4aedf.a0d3d",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/hub_rssi",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2750,
+        "y": 2660,
+        "wires": []
+    },
+    {
+        "id": "948a3678.3f3e68",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/ip",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2730,
+        "y": 2720,
+        "wires": []
+    },
+    {
+        "id": "72f8c1ee.f50c3",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/station_id",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3720,
+        "y": 2840,
+        "wires": []
+    },
+    {
+        "id": "24a4939d.80574c",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/name",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3700,
+        "y": 2900,
+        "wires": []
+    },
+    {
+        "id": "aa58572d.d312b8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/public_name",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3730,
+        "y": 2960,
+        "wires": []
+    },
+    {
+        "id": "9a5c4a04.5a9318",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/latitude",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3710,
+        "y": 3020,
+        "wires": []
+    },
+    {
+        "id": "12d1ce19.727802",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/longitude",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3720,
+        "y": 3080,
+        "wires": []
+    },
+    {
+        "id": "b2758fd5.77689",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/elevation",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3710,
+        "y": 3140,
+        "wires": []
+    },
+    {
+        "id": "f7a2d469.3465b8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/pressure/trend",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3730,
+        "y": 3740,
+        "wires": []
+    },
+    {
+        "id": "a2839d5.ea69c6",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/precipitation/quantity_today",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3770,
+        "y": 3420,
+        "wires": []
+    },
+    {
+        "id": "74ccf1da.e13c8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/precipitation/duration_today",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3770,
+        "y": 3480,
+        "wires": []
+    },
+    {
+        "id": "6e94e764.9df8e8",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "parts",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "topic.count",
+                "pt": "msg",
+                "to": "payload.count",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "topic.1h",
+                "pt": "msg",
+                "to": "payload.last_hour",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "topic.3h",
+                "pt": "msg",
+                "to": "payload.last_3_hours",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3320,
+        "y": 3640,
+        "wires": [
+            [
+                "dad7e7c3.47edf8"
+            ]
+        ]
+    },
+    {
+        "id": "dad7e7c3.47edf8",
+        "type": "json",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "property": "payload",
+        "action": "str",
+        "pretty": true,
+        "x": 3490,
+        "y": 3640,
+        "wires": [
+            [
+                "e7da49dd.b02ca8"
+            ]
+        ]
+    },
+    {
+        "id": "e7da49dd.b02ca8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/lightning/count",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3730,
+        "y": 3640,
+        "wires": []
+    },
+    {
+        "id": "7cb6aaf5.29b444",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/sensor_status/lightning_failed",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4080,
+        "y": 2180,
+        "wires": []
+    },
+    {
+        "id": "397ad28.0674b2e",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/sensor_status/lightning_noise",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4080,
+        "y": 2240,
+        "wires": []
+    },
+    {
+        "id": "7ec009c6.86e468",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/sensor_status/lightning_disturber",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4090,
+        "y": 2300,
+        "wires": []
+    },
+    {
+        "id": "5fc9fb75.56bab4",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/sensor_status/pressure_failed",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4080,
+        "y": 2360,
+        "wires": []
+    },
+    {
+        "id": "19605fad.11b4d",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/sensor_status/temperature_failed",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4090,
+        "y": 2420,
+        "wires": []
+    },
+    {
+        "id": "b435a42e.2ecdf8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/sensor_status/humidity_failed",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4080,
+        "y": 2480,
+        "wires": []
+    },
+    {
+        "id": "414f0b98.c32cd4",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/sensor_status/wind_failed",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4070,
+        "y": 2540,
+        "wires": []
+    },
+    {
+        "id": "be02a3bd.42372",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/sensor_status/rain_failed",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4060,
+        "y": 2600,
+        "wires": []
+    },
+    {
+        "id": "7ce706f6.61bf58",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/system/sensor_status/light_uv_failed",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 4080,
+        "y": 2660,
+        "wires": []
+    },
+    {
+        "id": "a3c8d22e.090b8",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2290,
+        "y": 3980,
+        "wires": []
+    },
+    {
+        "id": "478dff97.b60c6",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Densità dell'Aria",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Densità Aria"
+            },
+            {
+                "property": "device_class",
+                "value": ""
+            },
+            {
+                "property": "icon",
+                "value": "mdi:weight-kilogram"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "kg/m^3"
+            }
+        ],
+        "state": "payload.air_density",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2300,
+        "y": 3540,
+        "wires": [
+            [
+                "f3706da2.de989",
+                "eea37a52.c95a68"
+            ]
+        ]
+    },
+    {
+        "id": "5ead108f.5ded",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/air_density",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3720,
+        "y": 3540,
+        "wires": []
+    },
+    {
+        "id": "f3706da2.de989",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "DENSITA' DELL'ARIA",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.air_density",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2840,
+        "y": 3540,
+        "wires": []
+    },
+    {
+        "id": "dc390612.c4ccc8",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Pressione al Livello del Mare",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Pressione Livello del Mare"
+            },
+            {
+                "property": "device_class",
+                "value": "pressure"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:beach"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "mbar"
+            }
+        ],
+        "state": "payload.sea_level_pressure",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2340,
+        "y": 3800,
+        "wires": [
+            [
+                "409101b.cdb4a",
+                "8865552b.6d7848"
+            ]
+        ]
+    },
+    {
+        "id": "409101b.cdb4a",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "PRESSIONE LIVELLO DEL MARE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.sea_level_pressure",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2880,
+        "y": 3800,
+        "wires": []
+    },
+    {
+        "id": "e45004c4.33ec28",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/pressure/sea_level",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3740,
+        "y": 3800,
+        "wires": []
+    },
+    {
+        "id": "f8929694.dd1c58",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Temperatura Bulbo Umido",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Temperatura Bulbo Umido"
+            },
+            {
+                "property": "device_class",
+                "value": "temperature"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:coolant-temperature"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°C"
+            }
+        ],
+        "state": "payload.wet_bulb_temperature",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2340,
+        "y": 3860,
+        "wires": [
+            [
+                "54df4e97.e33ce",
+                "c0bf52b4.eb5f4"
+            ]
+        ]
+    },
+    {
+        "id": "54df4e97.e33ce",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "TEMPERATURA BULBO UMIDO",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.wet_bulb_temperature",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2870,
+        "y": 3860,
+        "wires": []
+    },
+    {
+        "id": "3b922f2b.20fd8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/temperature/wet_bulb",
+        "qos": "2",
+        "retain": "true",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3760,
+        "y": 3860,
+        "wires": []
+    },
+    {
+        "id": "b9d66e3a.66877",
+        "type": "ha-entity",
+        "z": "19cef663.c9958a",
+        "name": "Delta Temperatura",
+        "server": "419830c5.54d54",
+        "version": 1,
+        "debugenabled": false,
+        "outputs": 1,
+        "entityType": "sensor",
+        "config": [
+            {
+                "property": "name",
+                "value": "Tempest - Delta Temperatura"
+            },
+            {
+                "property": "device_class",
+                "value": "temperature"
+            },
+            {
+                "property": "icon",
+                "value": "mdi:delta"
+            },
+            {
+                "property": "unit_of_measurement",
+                "value": "°C"
+            }
+        ],
+        "state": "payload.delta_t",
+        "stateType": "msg",
+        "attributes": [],
+        "resend": true,
+        "outputLocation": "",
+        "outputLocationType": "none",
+        "inputOverride": "allow",
+        "outputOnStateChange": false,
+        "outputPayload": "",
+        "outputPayloadType": "str",
+        "x": 2310,
+        "y": 3920,
+        "wires": [
+            [
+                "79d50ec9.2cdf5",
+                "9a453aa5.b39138"
+            ]
+        ]
+    },
+    {
+        "id": "79d50ec9.2cdf5",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "DELTA TEMPERATURA",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload.delta_t",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2850,
+        "y": 3920,
+        "wires": []
+    },
+    {
+        "id": "885dcafa.f3bc18",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "topic": "Tempest_PWS/metrics/temperature/delta_t",
+        "qos": "2",
+        "retain": "true",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 3750,
+        "y": 3920,
+        "wires": []
+    },
+    {
+        "id": "1adb50bc.2be44f",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.precip_accum_local_day",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3310,
+        "y": 3420,
+        "wires": [
+            [
+                "a2839d5.ea69c6"
+            ]
+        ]
+    },
+    {
+        "id": "f314332f.83948",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.precip_minutes_local_day",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3320,
+        "y": 3480,
+        "wires": [
+            [
+                "74ccf1da.e13c8"
+            ]
+        ]
+    },
+    {
+        "id": "eea37a52.c95a68",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.air_density",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3270,
+        "y": 3540,
+        "wires": [
+            [
+                "5ead108f.5ded"
+            ]
+        ]
+    },
+    {
+        "id": "b3e0844d.b25858",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.pressure_trend",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3280,
+        "y": 3740,
+        "wires": [
+            [
+                "f7a2d469.3465b8"
+            ]
+        ]
+    },
+    {
+        "id": "8865552b.6d7848",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.sea_level_pressure",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3290,
+        "y": 3800,
+        "wires": [
+            [
+                "e45004c4.33ec28"
+            ]
+        ]
+    },
+    {
+        "id": "c0bf52b4.eb5f4",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.wet_bulb_temperature",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3300,
+        "y": 3860,
+        "wires": [
+            [
+                "3b922f2b.20fd8"
+            ]
+        ]
+    },
+    {
+        "id": "9a453aa5.b39138",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.delta_t",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3260,
+        "y": 3920,
+        "wires": [
+            [
+                "885dcafa.f3bc18"
+            ]
+        ]
+    },
+    {
+        "id": "25018378.f6012c",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2290,
+        "y": 3200,
+        "wires": []
+    },
+    {
+        "id": "9d7b1d67.c26ce",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.elevation",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3260,
+        "y": 3140,
+        "wires": [
+            [
+                "b2758fd5.77689"
+            ]
+        ]
+    },
+    {
+        "id": "d2013951.f1f528",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.longitude",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3260,
+        "y": 3080,
+        "wires": [
+            [
+                "12d1ce19.727802"
+            ]
+        ]
+    },
+    {
+        "id": "ee1e833f.07312",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.latitude",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3260,
+        "y": 3020,
+        "wires": [
+            [
+                "9a5c4a04.5a9318"
+            ]
+        ]
+    },
+    {
+        "id": "31beedb5.334582",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.public_name",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3270,
+        "y": 2960,
+        "wires": [
+            [
+                "aa58572d.d312b8"
+            ]
+        ]
+    },
+    {
+        "id": "98e080d0.692c1",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.station_name",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3280,
+        "y": 2900,
+        "wires": [
+            [
+                "24a4939d.80574c"
+            ]
+        ]
+    },
+    {
+        "id": "cf9e532d.6b715",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.station_id",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 3270,
+        "y": 2840,
+        "wires": [
+            [
+                "72f8c1ee.f50c3"
+            ]
+        ]
+    },
+    {
+        "id": "5aea135c.79c64c",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.serial_number",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2340,
+        "y": 2540,
+        "wires": [
+            [
+                "9f37b9af.94a9b8"
+            ]
+        ]
+    },
+    {
+        "id": "28836fad.7433f",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.firmware_revision",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2350,
+        "y": 2600,
+        "wires": [
+            [
+                "6ee3b698.1cf568"
+            ]
+        ]
+    },
+    {
+        "id": "940959cd.2c2ea8",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.rssi",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2310,
+        "y": 2660,
+        "wires": [
+            [
+                "feb4aedf.a0d3d"
+            ]
+        ]
+    },
+    {
+        "id": "f5fb8492.eddd98",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.ip",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2300,
+        "y": 2720,
+        "wires": [
+            [
+                "948a3678.3f3e68"
+            ]
+        ]
+    },
+    {
+        "id": "f85ee621.d27b08",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.serial_number",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2340,
+        "y": 2180,
+        "wires": [
+            [
+                "d7495e6c.dfd36"
+            ]
+        ]
+    },
+    {
+        "id": "59c2b840.968088",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.firmware_revision",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2350,
+        "y": 2240,
+        "wires": [
+            [
+                "c6529648.a691f8"
+            ]
+        ]
+    },
+    {
+        "id": "2421650c.56b62a",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.rssi",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2310,
+        "y": 2300,
+        "wires": [
+            [
+                "4e8e7913.c3e1e8"
+            ]
+        ]
+    },
+    {
         "id": "419830c5.54d54",
         "type": "server",
         "name": "Home Assistant",
@@ -6208,5 +7918,26 @@
         "ha_boolean": "y|yes|true|on|home|open",
         "connectionDelay": true,
         "cacheJson": true
+    },
+    {
+        "id": "4cb98ab5.4b27c4",
+        "type": "mqtt-broker",
+        "name": "MQTT Server",
+        "broker": "192.168.0.99",
+        "port": "1883",
+        "clientid": "NodeRED",
+        "usetls": false,
+        "compatmode": false,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
     }
 ]
