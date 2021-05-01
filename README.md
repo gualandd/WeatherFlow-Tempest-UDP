@@ -1,28 +1,25 @@
 # WeatherFlow - Tempest UDP & API Integration
 UDP & Rest API integration with NodeRED for Home Assistant
 
-This is a Node-Red flow that expose full metrics to Home Assistant; for the correct running of the flow the Node-Red HACS is required for the HA-Entity creation.
+This is a Node-Red flow that expose full metrics to MQTT only; no more direct exposure to Home Assistant due to resource demand of the HACS companion and to be usable for all.
 
-The flow expose all the UDP Metrics & Data available on port 50222 plus some metrics from the Rest API url dor a total of 52 entities: for the correct run of the Rest API
+The flow expose all the UDP Metrics & Data available on port 50222 plus some metrics from the Rest API url: for the correct run of the Rest API
 is mandatory to insert in injection nodes the Tempest API and the Station ID.
-All the available Rest infos are exposed in NR but only few are exposed to HA too, so is possible to expose extra info to HA simply add the relative entity node.
-I've inserted a check inside the flow to eliminate the startup error with entities when data flow in injected in ha-entity before the entity is connected to HA:
-it checks that all 52 have the green status and then allow the message flow to pass (via a traffic node).
-For this reason, if someone will add or delete some entities from the flow is necessary to modify the number inside the funcion node that check the entities status.
 
 The derived metrics are calculated & tested with the most recents formulas.
 All entities created have the "tempest_" suffix.
 
 ********************************
-Changelog 16/01/2021:
+Changelog 01/05/2021:
 
-Added MQTT publishing: the flow create a "Tempest_PWS" main topic that is nested with all the available data;
+Removed the direct Home Assistant Exposure: now You have to create MQTT entities in Home Assistant from the configuration.yaml: the flow create a "Tempest_PWS" main topic that is nested with all the available data;
 
 Removed Lightning Strike Distance & Date because no more available on API;
 
-Added 4 new sensors from API (Air Density, Sea Level Pressure, Wet Bulb Temp. and Delta T);
+Added filtering function in Rain Ammount & Time due to possible false readings from Rest API: if rain is less than 0.5mm is filtered to 0mm ammount and 0min rain time otherwise actual data is published.
+Added filtering function in Lightning detection to avoid false alarms: in lightning total day number is less than 5 is filtered to 0, otherwise actual number is published.
 
-Partial rebuild of the flow for avoid that new API metrics make problems.
+Partial rebuild of the flow to avoid problems with Node-Red Join node.
 ********************************
 
 EXPOSED UDP INFO (sensor):
