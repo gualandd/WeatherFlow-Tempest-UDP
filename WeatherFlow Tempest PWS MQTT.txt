@@ -1,0 +1,4923 @@
+[
+    {
+        "id": "19cef663.c9958a",
+        "type": "tab",
+        "label": "WeatherFlow Tempest",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "d7c1baa0.66b138",
+        "type": "udp in",
+        "z": "19cef663.c9958a",
+        "name": "Tempest PWS",
+        "iface": "",
+        "port": "50222",
+        "ipv": "udp4",
+        "multicast": "false",
+        "group": "",
+        "datatype": "utf8",
+        "x": 270,
+        "y": 1480,
+        "wires": [
+            [
+                "17716bb3.e50f14"
+            ]
+        ]
+    },
+    {
+        "id": "17716bb3.e50f14",
+        "type": "json",
+        "z": "19cef663.c9958a",
+        "name": "jsonconverter",
+        "property": "payload",
+        "action": "",
+        "pretty": true,
+        "x": 460,
+        "y": 1480,
+        "wires": [
+            [
+                "a54a33a9.d2bfa"
+            ]
+        ],
+        "inputLabels": [
+            "udpIn"
+        ],
+        "outputLabels": [
+            "jsonOut"
+        ]
+    },
+    {
+        "id": "ab6736d8.03a7f8",
+        "type": "switch",
+        "z": "19cef663.c9958a",
+        "name": "Payload Divider",
+        "property": "payload.type",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "obs_st",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "rapid_wind",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "device_status",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "hub_status",
+                "vt": "str"
+            }
+        ],
+        "checkall": "false",
+        "repair": false,
+        "outputs": 4,
+        "x": 860,
+        "y": 1480,
+        "wires": [
+            [
+                "a52725f2.01fb58"
+            ],
+            [
+                "a8b14ec3.b54b7"
+            ],
+            [
+                "7ea2ea8a.501584",
+                "d1f2c64f.51f318",
+                "d284ff7e.9a7f3",
+                "c7f8981b.b684a8"
+            ],
+            [
+                "e2f7c563.38d3a8",
+                "76095d0f.15ac84",
+                "b88313fc.4f02c",
+                "2241c77.0a36438"
+            ]
+        ],
+        "inputLabels": [
+            "jsonIn"
+        ],
+        "outputLabels": [
+            "Station Metrics",
+            "Wind Realtime",
+            "Station Status",
+            "Hub Status"
+        ]
+    },
+    {
+        "id": "f03b367.1c5c8c8",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Speed RT (km/h)",
+        "func": "msg.payload = Number((msg.payload[1] * 3.6).toFixed(1));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" km/h\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1640,
+        "y": 1480,
+        "wires": [
+            [
+                "4ea0216b.a685a",
+                "fd4fe758.735c08"
+            ]
+        ],
+        "outputLabels": [
+            "mph"
+        ]
+    },
+    {
+        "id": "8add765d.e86638",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Pressure (mbar)",
+        "func": "msg.payload = Number((msg.payload || 0).toFixed(0));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" mbar\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1620,
+        "y": 500,
+        "wires": [
+            [
+                "d84597d.6e22268",
+                "e7e32174.8bb93"
+            ]
+        ]
+    },
+    {
+        "id": "3131056a.add42a",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Temperature (°C)",
+        "func": "msg.payload = Number((msg.payload || 0).toFixed(1));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" °C\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1630,
+        "y": 560,
+        "wires": [
+            [
+                "5944b9c.0d68d48",
+                "6213508f.e3c4e",
+                "ed462f73.e1be5"
+            ]
+        ]
+    },
+    {
+        "id": "f5f19e9c.456f",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Humidity (%)",
+        "func": "msg.payload = Number((msg.payload || 0).toFixed(1));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" %\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1610,
+        "y": 880,
+        "wires": [
+            [
+                "1ce6c3e4.5e7c8c",
+                "7b573371.86229c",
+                "268af93d.658fc6"
+            ]
+        ]
+    },
+    {
+        "id": "83341290.66a23",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Lightning Count",
+        "func": "msg.lcount = msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1620,
+        "y": 1420,
+        "wires": [
+            [
+                "b6d11d5c.48bbb"
+            ]
+        ]
+    },
+    {
+        "id": "74bafa05.89dfa4",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Lightning Distance (km)",
+        "func": "msg.ldist = msg.payload;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1650,
+        "y": 1360,
+        "wires": [
+            [
+                "5a111e3e.697f4"
+            ]
+        ]
+    },
+    {
+        "id": "e869fe3f.e670d",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Battery (V)",
+        "func": "volt = Number((msg.payload).toFixed(2));\nmsg.volt = volt;\nnode.status({fill:\"green\",shape:\"dot\",text:msg.volt + \" V\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1610,
+        "y": 1160,
+        "wires": [
+            [
+                "7fcdcc44.716904",
+                "58692782.f0dc68",
+                "1ae1e5c.961a21a"
+            ]
+        ]
+    },
+    {
+        "id": "f6f1e606.0589f8",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Illuminance (Lux)",
+        "func": "msg.payload = Number(msg.payload);\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" lux\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1630,
+        "y": 940,
+        "wires": [
+            [
+                "4bf59d48.a5ade4",
+                "347e24f2.fad28c"
+            ]
+        ]
+    },
+    {
+        "id": "d46a09e4.ddd888",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "UV Index",
+        "func": "msg.uv = Number((msg.payload).toFixed(1));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.uv + \" i\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1600,
+        "y": 1000,
+        "wires": [
+            [
+                "9c17a941.f66ce8"
+            ]
+        ]
+    },
+    {
+        "id": "dcc84006.74afd",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Solar Radiation (W/mq)",
+        "func": "msg.payload = Number(msg.payload);\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" W/mq\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1650,
+        "y": 1060,
+        "wires": [
+            [
+                "68722d00.55a294",
+                "b3a8e94e.5de848"
+            ]
+        ]
+    },
+    {
+        "id": "f5692ff8.bc997",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Speed (km/h)",
+        "func": "msg.payload = Number((msg.payload * 3.6).toFixed(1));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" km/h\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1630,
+        "y": 120,
+        "wires": [
+            [
+                "b4f0663.ce23298",
+                "e96bb72e.8d3cc8",
+                "241abd3c.7ff6f2",
+                "683a937b.44a92c"
+            ]
+        ]
+    },
+    {
+        "id": "37b3e764.555248",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Gust (km/h)",
+        "func": "msg.payload = Number((msg.payload * 3.6).toFixed(1));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" km/h\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1630,
+        "y": 360,
+        "wires": [
+            [
+                "557e7bb6.08bc34",
+                "86f4b776.2c3948"
+            ]
+        ]
+    },
+    {
+        "id": "e3df819.767148",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Dir RT (°)",
+        "func": "msg.payload = msg.payload[2];\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" °\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1620,
+        "y": 1540,
+        "wires": [
+            [
+                "c8d34827.3c7808",
+                "9491f0c9.6814b",
+                "89cac872.b9a128"
+            ]
+        ],
+        "outputLabels": [
+            "degrees"
+        ]
+    },
+    {
+        "id": "7ea2ea8a.501584",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Sensor Status",
+        "func": "binaryStr = Number(msg.payload.sensor_status).toString(2);\n\nif(binaryStr.length < 9)\n{\n while(binaryStr.length < 9) \n {\n  binaryStr = \"0\" + binaryStr;\n }\n}\nelse if(binaryStr.length > 9)\n{\n  binaryStr = binaryStr.slice(-9);\n}\nelse if(binaryStr.length == 9)\n{\n  binaryStr = binaryStr;\n}\nmsg.payload = binaryStr;\nnode.status({fill:\"yellow\",shape:\"dot\",text:msg.payload});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1620,
+        "y": 2100,
+        "wires": [
+            [
+                "f285f56.fffd308",
+                "105ae549.80fa2b"
+            ]
+        ]
+    },
+    {
+        "id": "5f9f6fe1.24b1e",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Lull (km/h)",
+        "func": "msg.payload = Number((msg.payload * 3.6).toFixed(1));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" km/h\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1620,
+        "y": 60,
+        "wires": [
+            [
+                "4f5e3b82.cbddd4",
+                "fa4d5ec0.1a6a8"
+            ]
+        ]
+    },
+    {
+        "id": "325e9b3f.c66e24",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Dir (°)",
+        "func": "msg.dir = msg.payload;\nnode.status({fill:\"green\",shape:\"dot\",text:msg.dir + \" °\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1610,
+        "y": 420,
+        "wires": [
+            [
+                "c7dbde55.8da4d",
+                "55fffe0d.643ba",
+                "9212cf7.0572a3"
+            ]
+        ]
+    },
+    {
+        "id": "f392d1a.ae5f03",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Precipitazioni (Tipo)",
+        "func": "type = msg.payload;\nvar t = \"\";\n  if (type === 0)\n  {\n    t = \"NESSUNA\";\n  }\n  else if (type === 1)\n  {\n    t = \"PIOGGIA\";\n  }\n  else if (type === 2)\n  {\n    t = \"GRANDINE\";\n  }\nmsg.payload = t;\nnode.status({fill:\"blue\",shape:\"dot\",text:msg.payload});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1630,
+        "y": 1300,
+        "wires": [
+            [
+                "2fd84226.67ad2e",
+                "ffe74065.98da2"
+            ]
+        ]
+    },
+    {
+        "id": "f285f56.fffd308",
+        "type": "split",
+        "z": "19cef663.c9958a",
+        "name": "Binary Splitter",
+        "splt": "1",
+        "spltType": "len",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 2060,
+        "y": 2100,
+        "wires": [
+            [
+                "c8f7af71.428c3"
+            ]
+        ]
+    },
+    {
+        "id": "c8f7af71.428c3",
+        "type": "switch",
+        "z": "19cef663.c9958a",
+        "name": "Sensors Status",
+        "property": "parts.index",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "8",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "7",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "6",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "5",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "4",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 9,
+        "x": 2460,
+        "y": 2100,
+        "wires": [
+            [
+                "fe03b6a9.af1208",
+                "4b452e58.42caf"
+            ],
+            [
+                "79318045.6cfa4",
+                "d2b33f20.c6fbf"
+            ],
+            [
+                "394dbc77.859bc4",
+                "b2d4eee3.74ef4"
+            ],
+            [
+                "a3ba0902.9fde08",
+                "105bf7d1.084a88"
+            ],
+            [
+                "299700f8.0819d",
+                "dec13a9c.7a2248"
+            ],
+            [
+                "15b93fce.67a34",
+                "d19f4533.f2b7f8"
+            ],
+            [
+                "205224a2.4db3ac",
+                "1e196341.bb5bfd"
+            ],
+            [
+                "ddf3bdfe.52068",
+                "78e38e12.84338"
+            ],
+            [
+                "2c1dab67.efe094",
+                "569c18c7.a4d368"
+            ]
+        ],
+        "outputLabels": [
+            "Lightning Failed",
+            "Lightning Noise",
+            "Lightning Disturber",
+            "Pressure Failed",
+            "Temperature Failed",
+            "Humidity Failed",
+            "Wind Failed",
+            "Rain Failed",
+            "Light Failed"
+        ]
+    },
+    {
+        "id": "b4f0663.ce23298",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Beaufort Calculus",
+        "func": "bf = Math.round(Math.cbrt(Math.pow(msg.payload,2)/9));\nmsg.bf = bf;\nnode.status({fill:\"green\",shape:\"dot\",text:\"Index: \" + msg.bf});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1930,
+        "y": 180,
+        "wires": [
+            [
+                "e65622e3.4b513"
+            ]
+        ]
+    },
+    {
+        "id": "3da00adf.b971d6",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Dew Point Calculus",
+        "func": "var a = 17.271;\nvar b = 237.7;\nvar temp = Math.log(msg.payload.humidity * 0.01) + ((a * msg.payload.temperature) / (b + msg.payload.temperature));\nvar Td = (b * temp) / (a - temp);\nmsg.payload = Number(Td.toFixed(1));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" °C\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2090,
+        "y": 840,
+        "wires": [
+            [
+                "3d82e09f.ea5d8",
+                "77e87827.7b4ae8"
+            ]
+        ]
+    },
+    {
+        "id": "18957883.c30c07",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Thom Index",
+        "func": "var temp = msg.payload.temperature;\nvar hum = msg.payload.humidity;\nTHI = temp - (0.55 - 0.0055 * hum) * (temp - 14.5);\nmsg.thi = Number(THI.toFixed(1));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.thi + \" °C\"});\nreturn msg;\n\n\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2070,
+        "y": 780,
+        "wires": [
+            [
+                "14b65789.bc2658"
+            ]
+        ]
+    },
+    {
+        "id": "419729a3.73e9b8",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Heat Index",
+        "func": "var temp = msg.payload.temperature * 1.8 + 32;\nvar hum = msg.payload.humidity;\n\nhi = 0.5 * (temp + 61.0 + ((temp - 68.0) * 1.2) + (hum * 0.094));\nif (hi > 79) \n  {\n  hi = -42.379 + 2.04901523 * temp + 10.14333127 * hum + -0.22475541 * temp * hum + -0.00683783 * Math.pow(temp, 2) + -0.05481717 * Math.pow(hum, 2) + 0.00122874 * Math.pow(temp, 2) * hum + 0.00085282 * temp * Math.pow(hum, 2) + -0.00000199 * Math.pow(temp, 2) * Math.pow(hum, 2);\n   if((hum < 13) && (temp >= 80.0) && (temp <= 112.0))\n    hi -= ((13.0 - hum) * 0.25) * Math.sqrt((17.0 - Math.abs(temp - 95.0)) * 0.05882);\n   else if((hum > 85.0) && (temp >= 80.0) && (temp <= 87.0))\n    hi += ((hum - 85.0) * 0.1) * ((87.0 - temp) * 0.2);\n  }\nmsg.hi = Number(((hi - 32) / 1.8).toFixed(1));\n\nnode.status({fill:\"green\",shape:\"dot\",text:msg.hi + \" °C\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2070,
+        "y": 700,
+        "wires": [
+            [
+                "579b1f0.cce8ae"
+            ]
+        ]
+    },
+    {
+        "id": "611d14cd.07ce4c",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Chill - Old Formula",
+        "func": "var W = msg.payload.wind_speed;\nvar T = msg.payload.temperature;\nvar a = Math.sqrt(W);\nWCI = 33 - (33 - T) * (0.474266 + 0.453843 * a - 0.0453843 * W);\nmsg.wci = Number(WCI.toFixed(1));\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2070,
+        "y": 320,
+        "wires": [
+            [
+                "9e603724.3ff218"
+            ]
+        ]
+    },
+    {
+        "id": "687b31e9.02001",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Chill - New Formula",
+        "func": "var W  = msg.payload.wind_speed;\nvar Ta = msg.payload.temperature;\nvar a  = Math.pow(W, 0.16);\nWCI    = (13.12 + 0.6215 * Ta) - (11.37 * a) + (0.3965 * Ta * a);\nif (W < 3.7)\n{\n msg.w = -1;\n}\nelse\n{\n msg.w = 0;\n}\nmsg.wci = Number(WCI.toFixed(1));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.wci + \" °C\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2070,
+        "y": 260,
+        "wires": [
+            [
+                "b778281.aa2efd8"
+            ]
+        ]
+    },
+    {
+        "id": "31ae7faa.afcc3",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Humidex",
+        "func": "var Ta = msg.payload.temperature;\nvar UR = msg.payload.humidity;\n\nk1 = Math.pow(10, (7.5 * Ta / (237.7 + Ta)));\nk = 6.112 * k1 * UR / 100;\nUmidex = 1 * Ta + 0.5555 * (k - 10);\nmsg.udx = Number(Umidex.toFixed(1));\n\nnode.status({fill:\"green\",shape:\"dot\",text:msg.udx + \" °C\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2060,
+        "y": 620,
+        "wires": [
+            [
+                "800c9282.2caab"
+            ]
+        ]
+    },
+    {
+        "id": "105ae549.80fa2b",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "SENSORS STATUS",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1890,
+        "y": 2040,
+        "wires": []
+    },
+    {
+        "id": "c7dbde55.8da4d",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Cardinal",
+        "func": "deg = msg.dir;\nvar dir = \"\";\n  if (deg>11.25 && deg<=33.75)\n  {\n    dir = \"NNE\";\n  }\n  else if (deg>33.75 && deg<=56.25)\n  {\n    dir = \"ENE\";\n  }\n  else if (deg>56.25 && deg<=78.75)\n  {\n    dir = \"E\";\n  }\n  else if (deg>78.75 && deg<=101.25)\n  {\n    dir = \"ESE\";\n  }\n  else if (deg>101.25 && deg<=123.75)\n  {\n    dir = \"ESE\";\n  }\n  else if (deg>123.75 && deg<=146.25)\n  {\n    dir = \"SE\";\n  }\n  else if (deg>146.25 && deg<=168.75)\n  {\n    dir = \"SSE\";\n  }\n  else if (deg>168.75 && deg<=191.25)\n  {\n    dir = \"S\";\n  }\n  else if (deg>191.25 && deg<=213.75)\n  {\n    dir = \"SSO\";\n  }\n  else if (deg>213.75 && deg<=236.25)\n  {\n    dir = \"SO\";\n  }\n  else if (deg>236.25 && deg<=258.75)\n  {\n    dir = \"OSO\";\n  }\n  else if (deg>258.75 && deg<=281.25)\n  {\n    dir = \"O\";\n  }\n  else if (deg>281.25 && deg<=303.75)\n  {\n    dir = \"ONO\";\n  }\n  else if (deg>303.75 && deg<=326.25)\n  {\n    dir = \"NO\";\n  }\n  else if (deg>326.25 && deg<=348.75)\n  {\n    dir = \"NNO\";\n  }\n  else\n  {\n    dir = \"N\"; \n  }\nmsg.payload = dir;\nnode.status({fill:\"gray\",shape:\"dot\",text:msg.payload});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 2040,
+        "y": 460,
+        "wires": [
+            [
+                "ca537d68.8a06d",
+                "b1d6104d.c790c"
+            ]
+        ]
+    },
+    {
+        "id": "c8d34827.3c7808",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Wind Cardinal RT",
+        "func": "deg = msg.payload;\nvar dir = \"\";\n  if (deg>11.25 && deg<=33.75)\n  {\n    dir = \"NNE\";\n  }\n  else if (deg>33.75 && deg<=56.25)\n  {\n    dir = \"ENE\";\n  }\n  else if (deg>56.25 && deg<=78.75)\n  {\n    dir = \"E\";\n  }\n  else if (deg>78.75 && deg<=101.25)\n  {\n    dir = \"ESE\";\n  }\n  else if (deg>101.25 && deg<=123.75)\n  {\n    dir = \"ESE\";\n  }\n  else if (deg>123.75 && deg<=146.25)\n  {\n    dir = \"SE\";\n  }\n  else if (deg>146.25 && deg<=168.75)\n  {\n    dir = \"SSE\";\n  }\n  else if (deg>168.75 && deg<=191.25)\n  {\n    dir = \"S\";\n  }\n  else if (deg>191.25 && deg<=213.75)\n  {\n    dir = \"SSO\";\n  }\n  else if (deg>213.75 && deg<=236.25)\n  {\n    dir = \"SO\";\n  }\n  else if (deg>236.25 && deg<=258.75)\n  {\n    dir = \"OSO\";\n  }\n  else if (deg>258.75 && deg<=281.25)\n  {\n    dir = \"O\";\n  }\n  else if (deg>281.25 && deg<=303.75)\n  {\n    dir = \"ONO\";\n  }\n  else if (deg>303.75 && deg<=326.25)\n  {\n    dir = \"NO\";\n  }\n  else if (deg>326.25 && deg<=348.75)\n  {\n    dir = \"NNO\";\n  }\n  else\n  {\n    dir = \"N\"; \n  }\nmsg.payload = dir;\nnode.status({fill:\"gray\",shape:\"dot\",text:msg.payload});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1930,
+        "y": 1580,
+        "wires": [
+            [
+                "19af4efe.d09d11",
+                "ad00abce.22edd8"
+            ]
+        ]
+    },
+    {
+        "id": "e65622e3.4b513",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "BF Desc",
+        "func": "i = msg.bf;\nvar gr = \"\";\n  if (i === 0)\n  {\n    gr = \"CALMA\";\n  }\n  else if (i === 1)\n  {\n    gr = \"BAVA DI VENTO\";\n  }\n  else if (i === 2)\n  {\n    gr = \"BREZZA LEGGERA\";\n  }\n  else if (i === 3)\n  {\n    gr = \"BREZZA\";\n  }\n  else if (i === 4)\n  {\n    gr = \"BREZZA VIVACE\";\n  }\n  else if (i === 5)\n  {\n    gr = \"BREZZA TESA\";\n  }\n  else if (i === 6)\n  {\n    gr = \"VENTO FRESCO\";\n  }\n  else if (i === 7)\n  {\n    gr = \"VENTO FORTE\";\n  }\n  else if (i === 8)\n  {\n    gr = \"BURRASCA MODERATA\";\n  }\n  else if (i === 9)\n  {\n    gr = \"BURRASCA FORTE\";\n  }\n  else if (i === 10)\n  {\n    gr = \"TEMPESTA\";\n  }\n  else if (i === 11)\n  {\n    gr = \"FORTUNALE\";\n  }\n  else if (i === 12)\n  {\n    gr = \"URAGANO\";\n  }\nmsg.state = gr;\nnode.status({fill:\"gray\",shape:\"dot\",text:msg.state});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 2120,
+        "y": 180,
+        "wires": [
+            [
+                "fd7d54cf.48abb8",
+                "960810ee.eedd8"
+            ]
+        ]
+    },
+    {
+        "id": "b778281.aa2efd8",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "WC Desc",
+        "func": "var gr = \"\";\ni = msg.wci;\n\nif (msg.w === -1)\n{\n  gr = \"N.D.\";\n}\nelse\n{\n if (i > 4)\n {\n  gr = \"GRADEVOLE\";\n }\n else if (i > -6 && i <= 4)\n {\n  gr = \"FREDDO\";\n }\n else if (i > -17 && i <= -7)\n {\n  gr = \"MOLTO FREDDO\";\n }\n else if (i > -28 && i <= -17)\n {\n  gr = \"GELIDO\";\n }\n else if (i > -56 && i <= -28)\n {\n  gr = \"ESTR. FREDDO\";\n }\n else if (i <= -56)\n {\n  gr = \"GELATO\";\n }\n}\nmsg.state = gr;\nnode.status({fill:\"gray\",shape:\"dot\",text:msg.state});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 2280,
+        "y": 260,
+        "wires": [
+            [
+                "823fb5ea.b0d778",
+                "91747aa4.5c1298"
+            ]
+        ]
+    },
+    {
+        "id": "9e603724.3ff218",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "WC Desc",
+        "func": "i = msg.wci;\nvar gr = \"\";\n  if (i > 10)\n  {\n    gr = \"NESSUN DISAGIO\";\n  }\n  else if (i > -1 && i <= 10)\n  {\n    gr = \"LIEVE DISAGIO\";\n  }\n  else if (i > -10 && i <= -1)\n  {\n    gr = \"DISAGIO\";\n  }\n  else if (i > -18 && i <= -10)\n  {\n    gr = \"MOLTO FREDDO\";\n  }\n  else if (i > -29 && i <= -18)\n  {\n    gr = \"POSSIBILE CONGELAMENTO\";\n  }\n  else if (i > -50 && i <= -29)\n  {\n    gr = \"CONGELAMENTO\";\n  }\n  else if (i <= -50)\n  {\n    gr = \"RAPIDO CONGELAMENTO\";\n  }\nmsg.state = gr;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 2280,
+        "y": 320,
+        "wires": [
+            [
+                "b420f7e0.f38518",
+                "dc56f292.b6c7"
+            ]
+        ]
+    },
+    {
+        "id": "579b1f0.cce8ae",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "HI Desc",
+        "func": "i = msg.hi;\nvar gr = \"\";\n  if (i < 27 && i >= 24)\n  {\n    gr = \"CONFORTEVOLE\";\n  }\n  else if (i >= 27 && i <= 32)\n  {\n    gr = \"CALDO\";\n  }\n  else if (i > 32 && i <= 39)\n  {\n    gr = \"MOLTO CALDO\";\n  }\n  else if (i > 39 && i <= 54)\n  {\n    gr = \"ATTENZIONE\";\n  }\n  else if (i > 54)\n  {\n    gr = \"PERICOLO\";\n  }\n  else if (i < 24)\n  {\n    gr = \"N.D.\";\n  }\nmsg.state = gr;\nnode.status({fill:\"gray\",shape:\"dot\",text:msg.state});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 2220,
+        "y": 700,
+        "wires": [
+            [
+                "9bcb1ab0.a66b08",
+                "d1857cf9.d71ee"
+            ]
+        ]
+    },
+    {
+        "id": "800c9282.2caab",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "H Desc",
+        "func": "i = msg.udx;\nvar gr = \"\";\nif (i < 20)\n{\n  gr = \"N.D.\";\n}\nelse if (i >= 20 && i < 27)\n{\n  gr = \"BENESSERE\";\n}\nelse if (i >= 27 && i < 30)\n{\n  gr = \"CAUTELA\";\n}\nelse if (i >= 30 && i < 40)\n{\n  gr = \"ESTREMA CAUTELA\";\n}\nelse if (i >= 40 && i < 55)\n{  \n  gr = \"PERICOLO\";\n}\nelse if (i >= 55)\n{\n  gr = \"ELEVATO PERICOLO\";\n}\nmsg.state = gr;\nnode.status({fill:\"gray\",shape:\"dot\",text:msg.state});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 2220,
+        "y": 620,
+        "wires": [
+            [
+                "c7dc146e.085628",
+                "3e270433.6407cc"
+            ]
+        ]
+    },
+    {
+        "id": "1ae1e5c.961a21a",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Charge Status",
+        "func": "var volt = msg.volt;\nvar old_volt = flow.get(\"old_volt\");\nvar limit = 0.1;\nvar charge = \"\";\n\nif (old_volt === 0)\n  {\n    flow.set(\"old_volt\", volt);\n    node.status({fill:\"gray\",shape:\"dot\",text:\"Primo ciclo\"});\n    return null;\n  }\nelse if (volt > (old_volt + limit))\n  {\n    charge = \"CHARGING\";\n    flow.set(\"old_volt\", volt);\n    msg.payload = charge;\n    node.status({fill:\"green\",shape:\"dot\",text:charge});\n    return msg;\n  }\nelse\n  {\n    charge = \"NOT CHARGING\";\n    flow.set(\"old_volt\", volt);\n    msg.payload = charge;\n    node.status({fill:\"red\",shape:\"dot\",text:charge});\n    return msg;\n  }",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "flow.set(\"old_volt\", 0);",
+        "finalize": "",
+        "x": 1940,
+        "y": 1100,
+        "wires": [
+            [
+                "31a23b18.58c414",
+                "40d4c8d5.6b22e8"
+            ]
+        ]
+    },
+    {
+        "id": "7fcdcc44.716904",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "battery_level",
+        "func": "xMax = 100;\nxMin = 1;\nyMax = 3.00;\nyMin = 2.30;\nvar n = msg.volt;\n\nvar percent = (n - yMin) / (yMax - yMin);\nvar val = Math.round(percent * (xMax - xMin) + xMin);\n\nif (val < 0)\n  {\n    val = 0;\n  }\nelse if (val > 100)\n  {\n    val = 100;\n  }\nmsg.batperc = val;\nnode.status({fill:\"green\",shape:\"ring\",text:val + \"%\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1850,
+        "y": 1240,
+        "wires": [
+            [
+                "d4626506.9d6848",
+                "c7055be6.05a0a8"
+            ]
+        ]
+    },
+    {
+        "id": "14b65789.bc2658",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "THI Desc",
+        "func": "i = msg.thi;\nvar gr = \"\";\n  if (i >= 30)\n  {\n    gr = \"TORRIDO\";\n  }\n  else if (i >= 26.5 && i < 30)\n  {\n    gr = \"MOLTO CALDO\";\n  }\n  else if (i >= 20 && i < 26.5)\n  {\n    gr = \"CALDO\";\n  }\n  else if (i >= 15 && i < 20)\n  {\n    gr = \"CONFORTEVOLE\";\n  }\n  else if (i >= 13 && i < 15)\n  {\n    gr = \"FRESCO\";\n  }\n  else if (i > -1.8 && i < 13)\n  {\n    gr = \"FREDDO\";\n  }\n  else if (i > -10 && i <= -1.8)\n  {\n    gr = \"MOLTO FREDDO\";\n  }\n  else if (i > -20 && i <= -10)\n  {\n    gr = \"ESTR. FREDDO\";\n  }\n  else if (i > -40 && i <= 20)\n  {\n    gr = \"GLACIALE\";\n  }\n  else if (i <= -40)\n  {\n    gr = \"IPERGLACIALE\";\n  }\nmsg.state = gr;\nnode.status({fill:\"gray\",shape:\"dot\",text:msg.state});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 2220,
+        "y": 780,
+        "wires": [
+            [
+                "2b6f6005.e1396",
+                "d8fc1f17.0e96e"
+            ]
+        ]
+    },
+    {
+        "id": "9c17a941.f66ce8",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "UV Desc",
+        "func": "i = msg.uv\nvar uvi = \"\";\n\nif (i < 3)\n  {\n    uvi = \"BASSA\";\n  }\nelse if (i >= 3 && i <= 5)\n  {\n    uvi = \"MODERATA\";\n  }\nelse if (i > 5 && i <= 7)\n  {\n    uvi = \"ALTA\";\n  }\nelse if (i > 7 && i <= 10)\n  {\n    uvi = \"MOLTO ALTA\";\n  }\nelse if (i > 10)\n  {\n    uvi = \"ESTREMA\";\n  }\nmsg.uvi = uvi;\nnode.status({fill:\"gray\",shape:\"dot\",text:msg.uvi});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 2160,
+        "y": 1000,
+        "wires": [
+            [
+                "94c9c17f.db60b",
+                "7b423972.27e638"
+            ]
+        ]
+    },
+    {
+        "id": "1cda100b.ce12b",
+        "type": "http request",
+        "z": "19cef663.c9958a",
+        "name": "WeatherFlow Tempest REST Request",
+        "method": "GET",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 890,
+        "y": 2820,
+        "wires": [
+            [
+                "83d91de6.16631"
+            ]
+        ]
+    },
+    {
+        "id": "58dd142c.28e4ac",
+        "type": "comment",
+        "z": "19cef663.c9958a",
+        "name": "WEATHERFLOW TEMPEST - LOCAL UDP POLL",
+        "info": "WEATHERFLOW TEMPEST - LOCAL UDP POLL",
+        "x": 480,
+        "y": 1440,
+        "wires": []
+    },
+    {
+        "id": "4a351e1f.c42ac",
+        "type": "comment",
+        "z": "19cef663.c9958a",
+        "name": "WEATHERFLOW TEMPEST - REMOTE REST POLL",
+        "info": "WEATHERFLOW TEMPEST - LOCAL UDP POLL",
+        "x": 530,
+        "y": 2720,
+        "wires": []
+    },
+    {
+        "id": "df12a4a9.bfacb8",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "REST API PAYLOAD",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1340,
+        "y": 2820,
+        "wires": []
+    },
+    {
+        "id": "f63cc653.250788",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND CHILL (NEW)",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3150,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "241abd3c.7ff6f2",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND SPEED",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3140,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "fd4fe758.735c08",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND SPEED RT",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3150,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "fa4d5ec0.1a6a8",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND LULL",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3130,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "86f4b776.2c3948",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND GUST",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3130,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "9212cf7.0572a3",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND DIRECTION",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "dir",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3150,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "89cac872.b9a128",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND DIRECTION RT",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3160,
+        "y": 1540,
+        "wires": []
+    },
+    {
+        "id": "e7e32174.8bb93",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "PRESSURE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3130,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "6213508f.e3c4e",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "TEMPERATURE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3140,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "409796a8.537c38",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "HUMIDEX",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3120,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "2d075b48.48dbe4",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "HEAT INDEX",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3130,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "9caea6dd.b74268",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "THOM",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3110,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "77e87827.7b4ae8",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "DEW POINT",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3130,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "7b573371.86229c",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "HUMIDITY",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3130,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "347e24f2.fad28c",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "ILLUMINANCE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3140,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "3895eef5.ae8b72",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "UV INDEX",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3120,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "b3a8e94e.5de848",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "SOLAR RADIATION",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "rad",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3150,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "a2367f21.5bebc",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "BEAUFORT",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3130,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "b420f7e0.f38518",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND CHILL (OLD)",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "wci",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3150,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "dc56f292.b6c7",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND CHILL DESC.",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "state",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3400,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "ac07dc1f.ea25d",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND CHILL DESC.",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3160,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "12792260.53399e",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "BEAUFORT DESC.",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3150,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "b1d6104d.c790c",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND CARDINAL",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3150,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "ad00abce.22edd8",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND CARDINAL RT",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3160,
+        "y": 1580,
+        "wires": []
+    },
+    {
+        "id": "1a3e346b.275c4c",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "HUMIDEX DESC.",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3150,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "abc58eea.fa4c8",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "HEAT INDEX DESC.",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3160,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "733184d7.90283c",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "THOM DESC.",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3140,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "703bfdfa.28dd74",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "UV DESC.",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3130,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "2fd84226.67ad2e",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "PRECIPITATION TYPE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3160,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "6254bf5.ebeed4",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "TEMPEST S/N",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3140,
+        "y": 1640,
+        "wires": []
+    },
+    {
+        "id": "9b8ada6e.1a71b8",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "HUB S/N",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2260,
+        "y": 2200,
+        "wires": []
+    },
+    {
+        "id": "c53ba2b1.ef209",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "BATTERY (%)",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3140,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "f0083d4b.8800b",
+        "type": "switch",
+        "z": "19cef663.c9958a",
+        "name": "Metrics",
+        "property": "parts.index",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "4",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "5",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "6",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "7",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "8",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "9",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "10",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "11",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "12",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "13",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "14",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "15",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "16",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "17",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 18,
+        "x": 1320,
+        "y": 720,
+        "wires": [
+            [],
+            [
+                "5f9f6fe1.24b1e"
+            ],
+            [
+                "f5692ff8.bc997"
+            ],
+            [
+                "37b3e764.555248"
+            ],
+            [
+                "325e9b3f.c66e24"
+            ],
+            [],
+            [
+                "8add765d.e86638"
+            ],
+            [
+                "3131056a.add42a"
+            ],
+            [
+                "f5f19e9c.456f"
+            ],
+            [
+                "f6f1e606.0589f8"
+            ],
+            [
+                "d46a09e4.ddd888"
+            ],
+            [
+                "dcc84006.74afd"
+            ],
+            [],
+            [
+                "f392d1a.ae5f03"
+            ],
+            [
+                "74bafa05.89dfa4"
+            ],
+            [
+                "83341290.66a23"
+            ],
+            [
+                "e869fe3f.e670d"
+            ],
+            []
+        ],
+        "inputLabels": [
+            "Splitted Payload"
+        ],
+        "outputLabels": [
+            "Time Epoch",
+            "Wind Lull (m/s)",
+            "Wind Avg (m/s)",
+            "Wind Gust (m/s)",
+            "Wind Direction (deg)",
+            "Wind Sample Interval (s)",
+            "Station Pressure (mbar)",
+            "Air Temperature (°C)",
+            "Relative Humidity (%H)",
+            "Illuminance (Lux)",
+            "UV (Index)",
+            "Solar Radiation (W/m^2)",
+            "Precip Accumulated (mm)",
+            "Precipitation Type (0/1/2)",
+            "Lightning Strike Avg Distance (km)",
+            "Lightning Strike Count",
+            "Battery (V)",
+            "Report Interval (min)"
+        ]
+    },
+    {
+        "id": "a52725f2.01fb58",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.obs[0]",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1230,
+        "y": 1080,
+        "wires": [
+            [
+                "e42d2ac5.2259e8"
+            ]
+        ]
+    },
+    {
+        "id": "e42d2ac5.2259e8",
+        "type": "split",
+        "z": "19cef663.c9958a",
+        "name": "Metrics Array Splitter",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": "1",
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1080,
+        "y": 720,
+        "wires": [
+            [
+                "f0083d4b.8800b"
+            ]
+        ]
+    },
+    {
+        "id": "ff74b109.2567",
+        "type": "join",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1870,
+        "y": 740,
+        "wires": [
+            [
+                "31ae7faa.afcc3",
+                "419729a3.73e9b8",
+                "18957883.c30c07",
+                "3da00adf.b971d6"
+            ]
+        ]
+    },
+    {
+        "id": "54ac0440.54c25c",
+        "type": "join",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "num",
+        "reduceFixup": "",
+        "x": 1850,
+        "y": 280,
+        "wires": [
+            [
+                "687b31e9.02001",
+                "611d14cd.07ce4c"
+            ]
+        ]
+    },
+    {
+        "id": "a8b14ec3.b54b7",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.ob",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1360,
+        "y": 1480,
+        "wires": [
+            [
+                "f03b367.1c5c8c8",
+                "e3df819.767148"
+            ]
+        ]
+    },
+    {
+        "id": "e8da17a6.8b3298",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "HUB FW",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2260,
+        "y": 2240,
+        "wires": []
+    },
+    {
+        "id": "47dceb75.cfa3d4",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "TEMPEST FW",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3140,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "121848b6.6b3767",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "TEMPEST RSSI",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3140,
+        "y": 1760,
+        "wires": []
+    },
+    {
+        "id": "5b878faf.b5519",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "HUB RSSI",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2270,
+        "y": 2280,
+        "wires": []
+    },
+    {
+        "id": "dd19dad.dd22528",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "BATTERY (V)",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3130,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "40d4c8d5.6b22e8",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "CHARGE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3120,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "d9ab1ee2.b2ccf",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "Change",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.obs[0]",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1380,
+        "y": 3080,
+        "wires": [
+            [
+                "a3c8d22e.090b8",
+                "afede312.5a83e",
+                "1e0a08e1.78ae27",
+                "e7b82d2e.b60d1",
+                "abf471db.2cb9a",
+                "d2850f94.66aa5",
+                "257322b1.ecc12e",
+                "ffcc48e0.205f88",
+                "d356e7c7.862608",
+                "1dc6dd8f.fb11c2",
+                "c1c9ae4a.9d729"
+            ]
+        ]
+    },
+    {
+        "id": "2d43915e.a245ce",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": " obs Clear",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload.obs",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1380,
+        "y": 2680,
+        "wires": [
+            [
+                "25018378.f6012c",
+                "8b1ab49a.ffa878",
+                "a9b151b6.91de9",
+                "ecc1fe64.f7cc6",
+                "ab194b0b.8ef5f8",
+                "35039ea7.971e12",
+                "25dc5c92.3faba4"
+            ]
+        ]
+    },
+    {
+        "id": "5d2330b4.d2cdb",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "TENDENZA PRESSIONE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2750,
+        "y": 3140,
+        "wires": []
+    },
+    {
+        "id": "b9931455.91c868",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "QUANTITA' PRECIPITAZIONI OGGI",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2780,
+        "y": 2840,
+        "wires": []
+    },
+    {
+        "id": "15787b14.4f8d05",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "DURATA PRECIPITAZIONI OGGI",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2770,
+        "y": 2900,
+        "wires": []
+    },
+    {
+        "id": "e22c2f6c.b123a",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "LATITUDINE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2710,
+        "y": 2700,
+        "wires": []
+    },
+    {
+        "id": "cdf08c03.a0b1b",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "LONGITUDINE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2720,
+        "y": 2740,
+        "wires": []
+    },
+    {
+        "id": "8258d112.cfb39",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "ELEVAZIONE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2710,
+        "y": 2780,
+        "wires": []
+    },
+    {
+        "id": "59bb9324.fe873c",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "NOME STAZIONE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2730,
+        "y": 2620,
+        "wires": []
+    },
+    {
+        "id": "3c18970c.5015c8",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "NOME PUBBLICO STAZIONE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2770,
+        "y": 2660,
+        "wires": []
+    },
+    {
+        "id": "fdfe73b5.21646",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "STATION ID",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2710,
+        "y": 2580,
+        "wires": []
+    },
+    {
+        "id": "a54a33a9.d2bfa",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "fromip",
+                "pt": "msg"
+            },
+            {
+                "t": "move",
+                "p": "ip",
+                "pt": "msg",
+                "to": "payload.ip",
+                "tot": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "port",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 660,
+        "y": 1480,
+        "wires": [
+            [
+                "ab6736d8.03a7f8"
+            ]
+        ]
+    },
+    {
+        "id": "83d91de6.16631",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "Clear",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "responseUrl",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "redirectList",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "headers",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.timezone",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.is_public",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.status",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.station_units",
+                "pt": "msg"
+            },
+            {
+                "t": "delete",
+                "p": "payload.outdoor_keys",
+                "pt": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1130,
+        "y": 2820,
+        "wires": [
+            [
+                "df12a4a9.bfacb8",
+                "2d43915e.a245ce",
+                "d9ab1ee2.b2ccf"
+            ]
+        ]
+    },
+    {
+        "id": "621f5636.849118",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "FULMINI CADUTI",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2730,
+        "y": 3020,
+        "wires": []
+    },
+    {
+        "id": "cda4cc12.65e65",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "FULMINI IN 1 ORA",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2730,
+        "y": 3060,
+        "wires": []
+    },
+    {
+        "id": "76cffbb3.719cf4",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "FULMINI IN 3 ORE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2730,
+        "y": 3100,
+        "wires": []
+    },
+    {
+        "id": "afede312.5a83e",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.lightning_strike_count",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1700,
+        "y": 3020,
+        "wires": [
+            [
+                "5aaa73b7.dc5a9c"
+            ]
+        ]
+    },
+    {
+        "id": "1e0a08e1.78ae27",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.lightning_strike_count_last_1hr",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1730,
+        "y": 3060,
+        "wires": [
+            [
+                "920d4bc3.6d04a8",
+                "cda4cc12.65e65"
+            ]
+        ]
+    },
+    {
+        "id": "e7b82d2e.b60d1",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.lightning_strike_count_last_3hr",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1730,
+        "y": 3100,
+        "wires": [
+            [
+                "a7e192a4.a82c9",
+                "76cffbb3.719cf4"
+            ]
+        ]
+    },
+    {
+        "id": "b6d11d5c.48bbb",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "LIGHTNING COUNT ST",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "lcount",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3170,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "5a111e3e.697f4",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "LIGHTNING DISTANTE ST",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "ldist",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3180,
+        "y": 1360,
+        "wires": []
+    },
+    {
+        "id": "ce7a52e6.6d73f",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "IP ADDRESS",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2270,
+        "y": 2320,
+        "wires": []
+    },
+    {
+        "id": "4b452e58.42caf",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "LIGHTNING FAILED",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3160,
+        "y": 1860,
+        "wires": []
+    },
+    {
+        "id": "d2b33f20.c6fbf",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "LIGHTNING NOISE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3150,
+        "y": 1920,
+        "wires": []
+    },
+    {
+        "id": "b2d4eee3.74ef4",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "LIGHTNING DISTURBER",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3170,
+        "y": 1980,
+        "wires": []
+    },
+    {
+        "id": "105bf7d1.084a88",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "PRESSURE FAILED",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3160,
+        "y": 2040,
+        "wires": []
+    },
+    {
+        "id": "dec13a9c.7a2248",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "TEMPERATURE FAILED",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3170,
+        "y": 2100,
+        "wires": []
+    },
+    {
+        "id": "d19f4533.f2b7f8",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "HUMIDITY FAILED",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3150,
+        "y": 2160,
+        "wires": []
+    },
+    {
+        "id": "1e196341.bb5bfd",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "WIND FAILED",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3140,
+        "y": 2220,
+        "wires": []
+    },
+    {
+        "id": "78e38e12.84338",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "RAIN FAILED",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3130,
+        "y": 2280,
+        "wires": []
+    },
+    {
+        "id": "569c18c7.a4d368",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "LIGHT/UV FAILED",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3150,
+        "y": 2340,
+        "wires": []
+    },
+    {
+        "id": "e3e5b2f1.6d5a8",
+        "type": "inject",
+        "z": "19cef663.c9958a",
+        "name": "API KEY",
+        "props": [
+            {
+                "p": "payload.key",
+                "v": "YOUR API KEY",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "x": 320,
+        "y": 2800,
+        "wires": [
+            [
+                "f1466b78.c3fec8"
+            ]
+        ]
+    },
+    {
+        "id": "e5dfc499.eda3c8",
+        "type": "inject",
+        "z": "19cef663.c9958a",
+        "name": "STATION ID",
+        "props": [
+            {
+                "p": "payload.id",
+                "v": "YOUR STATION ID",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": true,
+        "onceDelay": "2",
+        "topic": "",
+        "x": 310,
+        "y": 2840,
+        "wires": [
+            [
+                "f1466b78.c3fec8"
+            ]
+        ]
+    },
+    {
+        "id": "d5be3e17.13ba1",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "func": "const API_KEY = msg.payload.key;\nconst STATION_ID = msg.payload.id;\n\nmsg.url = \"https://swd.weatherflow.com/swd/rest/observations/station/\" + STATION_ID + \"?token=\" + API_KEY;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 620,
+        "y": 2820,
+        "wires": [
+            [
+                "47ddcc3a.dc1dc4",
+                "1cda100b.ce12b"
+            ]
+        ]
+    },
+    {
+        "id": "f1466b78.c3fec8",
+        "type": "join",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "mode": "custom",
+        "build": "merged",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "payload",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 470,
+        "y": 2820,
+        "wires": [
+            [
+                "d5be3e17.13ba1"
+            ]
+        ]
+    },
+    {
+        "id": "47ddcc3a.dc1dc4",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "url",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 2780,
+        "wires": []
+    },
+    {
+        "id": "9aed8c01.c9992",
+        "type": "comment",
+        "z": "19cef663.c9958a",
+        "name": "TEMPEST FLOW - MQTT Only",
+        "info": "",
+        "x": 420,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "58692782.f0dc68",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Power Saving Mode",
+        "func": "var v = msg.volt;\nvar mode = \"\";\n\nif (v <= 2.355)\n  {\n    mode = \"Mode 3\";\n  }\nelse if (v > 2.355 && v <= 2.400)\n  {\n    mode = \"Mode 2\";\n  }\nelse if (v > 2.400 && v <= 2.425)\n  {\n    mode = \"Mode 1\";\n  }\nelse if (v > 2.425)\n  {\n    mode = \"Mode 0\";\n  }\nmsg.mode = mode;\nnode.status({fill:\"gray\",shape:\"dot\",text:msg.mode});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1880,
+        "y": 1160,
+        "wires": [
+            [
+                "f58279a7.4ca908"
+            ]
+        ]
+    },
+    {
+        "id": "f58279a7.4ca908",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Power Saving Description",
+        "func": "var mode = msg.mode;\nvar st = \"\";\n\nif (mode === \"Mode 0\")\n  {\n    st = \"FULL PERFORMANCE\";\n  }\nelse if (mode === \"Mode 1\")\n  {\n    st = \"WIND @ 6 s\";\n  }\nelse if (mode === \"Mode 2\")\n  {\n    st = \"WIND @ 1 min\";\n  }\nelse if (mode === \"Mode 3\")\n  {\n    st = \"SENSORS @ 5 min, LIGHTNING & RAIN OFF\";\n  }\nmsg.mode_desc = st;\nnode.status({fill:\"gray\",shape:\"dot\",text:msg.mode_desc});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 2110,
+        "y": 1160,
+        "wires": [
+            [
+                "a28621c5.8a016",
+                "5dc2bdf2.9b67c4"
+            ]
+        ]
+    },
+    {
+        "id": "48e46e60.86bdd",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "POWER SAVING MODE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3170,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "793c4415.801bfc",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "POWER SAVING DESCRIPTION",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 3190,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "a3c8d22e.090b8",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1610,
+        "y": 3340,
+        "wires": []
+    },
+    {
+        "id": "f3706da2.de989",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "DENSITA' DELL'ARIA",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2740,
+        "y": 2960,
+        "wires": []
+    },
+    {
+        "id": "409101b.cdb4a",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "PRESSIONE LIVELLO DEL MARE",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2780,
+        "y": 3200,
+        "wires": []
+    },
+    {
+        "id": "54df4e97.e33ce",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "TEMPERATURA BULBO UMIDO",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2770,
+        "y": 3260,
+        "wires": []
+    },
+    {
+        "id": "79d50ec9.2cdf5",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "DELTA TEMPERATURA",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2750,
+        "y": 3300,
+        "wires": []
+    },
+    {
+        "id": "25018378.f6012c",
+        "type": "debug",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1350,
+        "y": 2620,
+        "wires": []
+    },
+    {
+        "id": "abf471db.2cb9a",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "func": "var trend = msg.payload.pressure_trend;\n\nif(trend === \"falling\")\n    msg.payload = \"IN DISCESA\";\n    \nelse if(trend === \"steady\")\n    msg.payload = \"STABILE\";\n    \nelse if(trend === \"rising\")\n    msg.payload = \"IN SALITA\";\n    \nelse if(trend === \"unknown\")\n    msg.payload = \"SCONOSCIUTA\";\n    \nelse\n    msg.payload = \"ERRORE\";\nnode.status({fill:\"gray\",shape:\"dot\",text:msg.payload});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1600,
+        "y": 3140,
+        "wires": [
+            [
+                "74f244b2.5c77fc",
+                "5d2330b4.d2cdb"
+            ]
+        ]
+    },
+    {
+        "id": "d2850f94.66aa5",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "func": "if(msg.payload.precip_accum_local_day <= 0.5)\n   msg.payload.precip_accum_local_day = 0;\nelse\n   msg.payload.precip_accum_local_day = msg.payload.precip_accum_local_day;\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload.precip_accum_local_day + \" mm\"});\n\nnode.send({ payload:msg.payload.precip_accum_local_day });",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1600,
+        "y": 2840,
+        "wires": [
+            [
+                "c9faf340.1a1c6"
+            ]
+        ]
+    },
+    {
+        "id": "257322b1.ecc12e",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "func": "if(msg.payload.precip_minutes_local_day <= 5)\n   msg.payload.precip_minutes_local_day = 0;\nelse\n   msg.payload.precip_minutes_local_day = msg.payload.precip_minutes_local_day;\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload.precip_minutes_local_day + \" min\"});\nnode.send({ payload:msg.payload.precip_minutes_local_day });",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1600,
+        "y": 2900,
+        "wires": [
+            [
+                "476fa144.553df"
+            ]
+        ]
+    },
+    {
+        "id": "4f5e3b82.cbddd4",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Wind Lull",
+        "topic": "Tempest_PWS/metrics/wind/lull",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2840,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "e96bb72e.8d3cc8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Wind Speed",
+        "topic": "Tempest_PWS/metrics/wind/speed",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2690,
+        "y": 120,
+        "wires": []
+    },
+    {
+        "id": "62772f83.04979",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Beaufort",
+        "topic": "Tempest_PWS/metrics/wind/beaufort/index",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2840,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "fd7d54cf.48abb8",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "bf",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2310,
+        "y": 160,
+        "wires": [
+            [
+                "62772f83.04979",
+                "a2367f21.5bebc"
+            ]
+        ]
+    },
+    {
+        "id": "7d9fa1ef.a93c5",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Beaufort State",
+        "topic": "Tempest_PWS/metrics/wind/beaufort/state",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2680,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "960810ee.eedd8",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "state",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2320,
+        "y": 200,
+        "wires": [
+            [
+                "7d9fa1ef.a93c5",
+                "12792260.53399e"
+            ]
+        ]
+    },
+    {
+        "id": "43b644ee.1c3d3c",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Windchill",
+        "topic": "Tempest_PWS/metrics/temperature/windchill/index",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2840,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "91747aa4.5c1298",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "wci",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2460,
+        "y": 240,
+        "wires": [
+            [
+                "43b644ee.1c3d3c",
+                "f63cc653.250788"
+            ]
+        ]
+    },
+    {
+        "id": "8a5bc464.3f10d8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Windchill State",
+        "topic": "Tempest_PWS/metrics/temperature/windchill/state",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2680,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "823fb5ea.b0d778",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "state",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2460,
+        "y": 280,
+        "wires": [
+            [
+                "8a5bc464.3f10d8",
+                "ac07dc1f.ea25d"
+            ]
+        ]
+    },
+    {
+        "id": "557e7bb6.08bc34",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Wind Gust",
+        "topic": "Tempest_PWS/metrics/wind/gust",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2690,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "55fffe0d.643ba",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Wind Direction",
+        "topic": "Tempest_PWS/metrics/wind/direction",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2860,
+        "y": 420,
+        "wires": []
+    },
+    {
+        "id": "ca537d68.8a06d",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Wind Cardinal",
+        "topic": "Tempest_PWS/metrics/wind/cardinal",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2680,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "d84597d.6e22268",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Pressure",
+        "topic": "Tempest_PWS/metrics/pressure/pressure",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2840,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "5944b9c.0d68d48",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Temperature",
+        "topic": "Tempest_PWS/metrics/temperature/air",
+        "qos": "2",
+        "retain": "true",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2690,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "7d2247db.cc5da8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Humidex",
+        "topic": "Tempest_PWS/metrics/temperature/humidex/index",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2840,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "c7dc146e.085628",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "udx",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2480,
+        "y": 600,
+        "wires": [
+            [
+                "7d2247db.cc5da8",
+                "409796a8.537c38"
+            ]
+        ]
+    },
+    {
+        "id": "e0aa14b4.c78a78",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Humidex State",
+        "topic": "Tempest_PWS/metrics/temperature/humidex/state",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2680,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "3e270433.6407cc",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "state",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2480,
+        "y": 640,
+        "wires": [
+            [
+                "e0aa14b4.c78a78",
+                "1a3e346b.275c4c"
+            ]
+        ]
+    },
+    {
+        "id": "2dd94227.df2fbe",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Heat",
+        "topic": "Tempest_PWS/metrics/temperature/heat/index",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2830,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "9bcb1ab0.a66b08",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "hi",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2470,
+        "y": 680,
+        "wires": [
+            [
+                "2dd94227.df2fbe",
+                "2d075b48.48dbe4"
+            ]
+        ]
+    },
+    {
+        "id": "29229ab.6d0a466",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Heat State",
+        "topic": "Tempest_PWS/metrics/temperature/heat/state",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2690,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "d1857cf9.d71ee",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "state",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2480,
+        "y": 720,
+        "wires": [
+            [
+                "29229ab.6d0a466",
+                "abc58eea.fa4c8"
+            ]
+        ]
+    },
+    {
+        "id": "f7c3fa0c.314838",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Thom",
+        "topic": "Tempest_PWS/metrics/temperature/thom/index",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2830,
+        "y": 760,
+        "wires": []
+    },
+    {
+        "id": "2b6f6005.e1396",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "thi",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2480,
+        "y": 760,
+        "wires": [
+            [
+                "f7c3fa0c.314838",
+                "9caea6dd.b74268"
+            ]
+        ]
+    },
+    {
+        "id": "78e09f49.1ff59",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Thom State",
+        "topic": "Tempest_PWS/metrics/temperature/thom/state",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2690,
+        "y": 800,
+        "wires": []
+    },
+    {
+        "id": "d8fc1f17.0e96e",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "state",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2480,
+        "y": 800,
+        "wires": [
+            [
+                "78e09f49.1ff59",
+                "733184d7.90283c"
+            ]
+        ]
+    },
+    {
+        "id": "3d82e09f.ea5d8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Dewpoint",
+        "topic": "Tempest_PWS/metrics/temperature/dewpoint",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2840,
+        "y": 840,
+        "wires": []
+    },
+    {
+        "id": "1ce6c3e4.5e7c8c",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Humidity",
+        "topic": "Tempest_PWS/metrics/humidity",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2700,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "4bf59d48.a5ade4",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Illuminance",
+        "topic": "Tempest_PWS/metrics/illuminance",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2850,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "36788f7c.bd4b",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "UV",
+        "topic": "Tempest_PWS/metrics/uv/index",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2710,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "94c9c17f.db60b",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "uv",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2400,
+        "y": 980,
+        "wires": [
+            [
+                "36788f7c.bd4b",
+                "3895eef5.ae8b72"
+            ]
+        ]
+    },
+    {
+        "id": "575a0dec.7ecb14",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "UV State",
+        "topic": "Tempest_PWS/metrics/uv/state",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2840,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "7b423972.27e638",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "uvi",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2400,
+        "y": 1020,
+        "wires": [
+            [
+                "575a0dec.7ecb14",
+                "703bfdfa.28dd74"
+            ]
+        ]
+    },
+    {
+        "id": "68722d00.55a294",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Solar Radiation",
+        "topic": "Tempest_PWS/metrics/solar_radiation",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2680,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "31a23b18.58c414",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Charge Status",
+        "topic": "Tempest_PWS/status/station/charge",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2860,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "a28621c5.8a016",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "mode",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2430,
+        "y": 1140,
+        "wires": [
+            [
+                "8c290224.f4253",
+                "48e46e60.86bdd"
+            ]
+        ]
+    },
+    {
+        "id": "5dc2bdf2.9b67c4",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "mode_desc",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2440,
+        "y": 1180,
+        "wires": [
+            [
+                "6bf85e6a.513e4",
+                "793c4415.801bfc"
+            ]
+        ]
+    },
+    {
+        "id": "8c290224.f4253",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Power Saving Mode",
+        "topic": "Tempest_PWS/status/station/power_saving/mode",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2660,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "6bf85e6a.513e4",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Power Saving Mode Desc.",
+        "topic": "Tempest_PWS/status/station/power_saving/state",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2900,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "d4626506.9d6848",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "batperc",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2150,
+        "y": 1220,
+        "wires": [
+            [
+                "ef7b27d6.8fe598",
+                "c53ba2b1.ef209"
+            ]
+        ]
+    },
+    {
+        "id": "ef7b27d6.8fe598",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Battery %",
+        "topic": "Tempest_PWS/status/station/battery/percent",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2700,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "c7055be6.05a0a8",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "volt",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2140,
+        "y": 1260,
+        "wires": [
+            [
+                "99610e48.93d0d",
+                "dd19dad.dd22528"
+            ]
+        ]
+    },
+    {
+        "id": "99610e48.93d0d",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Battery V",
+        "topic": "Tempest_PWS/status/station/battery/volts",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2840,
+        "y": 1260,
+        "wires": []
+    },
+    {
+        "id": "ffe74065.98da2",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Precipitation Type",
+        "topic": "Tempest_PWS/metrics/precipitation/type",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2670,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "4ea0216b.a685a",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Wind Speed RT",
+        "topic": "Tempest_PWS/metrics/wind/speed_rt",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2680,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "9491f0c9.6814b",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Wind Direction RT",
+        "topic": "Tempest_PWS/metrics/wind/direction_rt",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2870,
+        "y": 1540,
+        "wires": []
+    },
+    {
+        "id": "19af4efe.d09d11",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Wind Cardinal RT",
+        "topic": "Tempest_PWS/metrics/wind/cardinal_rt",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2670,
+        "y": 1580,
+        "wires": []
+    },
+    {
+        "id": "fe03b6a9.af1208",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Lightning Status",
+        "topic": "Tempest_PWS/status/station/sensors/lightning",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2880,
+        "y": 1860,
+        "wires": []
+    },
+    {
+        "id": "79318045.6cfa4",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Lightning Noise Status",
+        "topic": "Tempest_PWS/status/station/sensors/lightning_noise",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2900,
+        "y": 1920,
+        "wires": []
+    },
+    {
+        "id": "394dbc77.859bc4",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Lightning Disturber Status",
+        "topic": "Tempest_PWS/status/station/sensors/lightning_disturber",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2910,
+        "y": 1980,
+        "wires": []
+    },
+    {
+        "id": "a3ba0902.9fde08",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Pressure Status",
+        "topic": "Tempest_PWS/status/station/sensors/pressure",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2880,
+        "y": 2040,
+        "wires": []
+    },
+    {
+        "id": "299700f8.0819d",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Temperature Status",
+        "topic": "Tempest_PWS/status/station/sensors/temperature",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2890,
+        "y": 2100,
+        "wires": []
+    },
+    {
+        "id": "15b93fce.67a34",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Humidity Status",
+        "topic": "Tempest_PWS/status/station/sensors/humidity",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2880,
+        "y": 2160,
+        "wires": []
+    },
+    {
+        "id": "205224a2.4db3ac",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Wind Status",
+        "topic": "Tempest_PWS/status/station/sensors/wind",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2870,
+        "y": 2220,
+        "wires": []
+    },
+    {
+        "id": "ddf3bdfe.52068",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Rain Status",
+        "topic": "Tempest_PWS/status/station/sensors/rain",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2870,
+        "y": 2280,
+        "wires": []
+    },
+    {
+        "id": "2c1dab67.efe094",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Light/UV Status",
+        "topic": "Tempest_PWS/status/station/sensors/light_uv",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2880,
+        "y": 2340,
+        "wires": []
+    },
+    {
+        "id": "22d57d4e.7d5202",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Station S/N",
+        "topic": "Tempest_PWS/info/station/serial",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2850,
+        "y": 1640,
+        "wires": []
+    },
+    {
+        "id": "d1f2c64f.51f318",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.serial_number",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1680,
+        "y": 1640,
+        "wires": [
+            [
+                "22d57d4e.7d5202",
+                "6254bf5.ebeed4"
+            ]
+        ]
+    },
+    {
+        "id": "9cd2c38c.6bcb7",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Station FW",
+        "topic": "Tempest_PWS/info/station/firmware",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2690,
+        "y": 1700,
+        "wires": []
+    },
+    {
+        "id": "d284ff7e.9a7f3",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.firmware_revision",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1690,
+        "y": 1700,
+        "wires": [
+            [
+                "9cd2c38c.6bcb7",
+                "47dceb75.cfa3d4"
+            ]
+        ]
+    },
+    {
+        "id": "d173f079.19d95",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Station RSSI",
+        "topic": "Tempest_PWS/info/station/rssi",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2850,
+        "y": 1760,
+        "wires": []
+    },
+    {
+        "id": "c7f8981b.b684a8",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.rssi",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1650,
+        "y": 1760,
+        "wires": [
+            [
+                "d173f079.19d95",
+                "121848b6.6b3767"
+            ]
+        ]
+    },
+    {
+        "id": "ca322434.d80868",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Hub S/N",
+        "topic": "Tempest_PWS/info/hub/serial",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2100,
+        "y": 2200,
+        "wires": []
+    },
+    {
+        "id": "e2f7c563.38d3a8",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.serial_number",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1680,
+        "y": 2200,
+        "wires": [
+            [
+                "ca322434.d80868",
+                "9b8ada6e.1a71b8"
+            ]
+        ]
+    },
+    {
+        "id": "76c874e8.4dafec",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Hub FW",
+        "topic": "Tempest_PWS/info/hub/firmware",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 1940,
+        "y": 2240,
+        "wires": []
+    },
+    {
+        "id": "76095d0f.15ac84",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.firmware_revision",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1690,
+        "y": 2240,
+        "wires": [
+            [
+                "76c874e8.4dafec",
+                "e8da17a6.8b3298"
+            ]
+        ]
+    },
+    {
+        "id": "23a04f.9faeafb2",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Hub RSSI",
+        "topic": "Tempest_PWS/info/hub/rssi",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2100,
+        "y": 2280,
+        "wires": []
+    },
+    {
+        "id": "b88313fc.4f02c",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.rssi",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1650,
+        "y": 2280,
+        "wires": [
+            [
+                "23a04f.9faeafb2",
+                "5b878faf.b5519"
+            ]
+        ]
+    },
+    {
+        "id": "fd0004b5.b828c8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Hub IP Address",
+        "topic": "Tempest_PWS/info/hub/ip_address",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 1960,
+        "y": 2320,
+        "wires": []
+    },
+    {
+        "id": "2241c77.0a36438",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.ip",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1640,
+        "y": 2320,
+        "wires": [
+            [
+                "fd0004b5.b828c8",
+                "ce7a52e6.6d73f"
+            ]
+        ]
+    },
+    {
+        "id": "2d2cde3d.943722",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Station ID",
+        "topic": "Tempest_PWS/info/station/id",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2440,
+        "y": 2580,
+        "wires": []
+    },
+    {
+        "id": "8b1ab49a.ffa878",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.station_id",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1670,
+        "y": 2580,
+        "wires": [
+            [
+                "2d2cde3d.943722",
+                "fdfe73b5.21646"
+            ]
+        ]
+    },
+    {
+        "id": "aac844dc.dad358",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Station Name",
+        "topic": "Tempest_PWS/info/station/name",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2280,
+        "y": 2620,
+        "wires": []
+    },
+    {
+        "id": "a9b151b6.91de9",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.station_name",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1680,
+        "y": 2620,
+        "wires": [
+            [
+                "aac844dc.dad358",
+                "59bb9324.fe873c"
+            ]
+        ]
+    },
+    {
+        "id": "2325c296.2a8d6e",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Station Public Name",
+        "topic": "Tempest_PWS/info/station/public",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2480,
+        "y": 2660,
+        "wires": []
+    },
+    {
+        "id": "ecc1fe64.f7cc6",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.public_name",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1670,
+        "y": 2660,
+        "wires": [
+            [
+                "2325c296.2a8d6e",
+                "3c18970c.5015c8"
+            ]
+        ]
+    },
+    {
+        "id": "b72f861c.2195a8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Station Latitude",
+        "topic": "Tempest_PWS/info/coordinates/latitude",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2280,
+        "y": 2700,
+        "wires": []
+    },
+    {
+        "id": "ab194b0b.8ef5f8",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.latitude",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1660,
+        "y": 2700,
+        "wires": [
+            [
+                "b72f861c.2195a8",
+                "e22c2f6c.b123a"
+            ]
+        ]
+    },
+    {
+        "id": "5846f0de.9823e",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Station Longitude",
+        "topic": "Tempest_PWS/info/coordinates/longitude",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2470,
+        "y": 2740,
+        "wires": []
+    },
+    {
+        "id": "35039ea7.971e12",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.longitude",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1660,
+        "y": 2740,
+        "wires": [
+            [
+                "5846f0de.9823e",
+                "cdf08c03.a0b1b"
+            ]
+        ]
+    },
+    {
+        "id": "d8074e30.b32db",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Station Elevation",
+        "topic": "Tempest_PWS/info/coordinates/elevation",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2270,
+        "y": 2780,
+        "wires": []
+    },
+    {
+        "id": "809d266b.1accf8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Precipitation Q.ty Today",
+        "topic": "Tempest_PWS/metrics/precipitation/quantity",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2490,
+        "y": 2840,
+        "wires": []
+    },
+    {
+        "id": "c9faf340.1a1c6",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "acc",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1780,
+        "y": 2840,
+        "wires": [
+            [
+                "61517eef.4fd2e"
+            ]
+        ]
+    },
+    {
+        "id": "1082f5ff.b54a3a",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Precipitation Duration Today",
+        "topic": "Tempest_PWS/metrics/precipitation/duration",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2500,
+        "y": 2900,
+        "wires": []
+    },
+    {
+        "id": "476fa144.553df",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "dur",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1780,
+        "y": 2900,
+        "wires": [
+            [
+                "61517eef.4fd2e"
+            ]
+        ]
+    },
+    {
+        "id": "c3da5be0.0df5e8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Air Density",
+        "topic": "Tempest_PWS/metrics/air_density",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2450,
+        "y": 2960,
+        "wires": []
+    },
+    {
+        "id": "ad679259.f9061",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Lightning Total Count",
+        "topic": "Tempest_PWS/metrics/lightning/total_count",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2260,
+        "y": 3020,
+        "wires": []
+    },
+    {
+        "id": "920d4bc3.6d04a8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Lightning 1h Count",
+        "topic": "Tempest_PWS/metrics/lightning/1h_count",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2470,
+        "y": 3060,
+        "wires": []
+    },
+    {
+        "id": "a7e192a4.a82c9",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Lightning 3h Count",
+        "topic": "Tempest_PWS/metrics/lightning/3h_count",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2270,
+        "y": 3100,
+        "wires": []
+    },
+    {
+        "id": "74f244b2.5c77fc",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Pressure Trend",
+        "topic": "Tempest_PWS/metrics/pressure/trend",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2460,
+        "y": 3140,
+        "wires": []
+    },
+    {
+        "id": "eeb3652c.18fda8",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Sea Level Pressure",
+        "topic": "Tempest_PWS/metrics/pressure/sea_level",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2270,
+        "y": 3200,
+        "wires": []
+    },
+    {
+        "id": "1dc6dd8f.fb11c2",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.wet_bulb_temperature",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1700,
+        "y": 3260,
+        "wires": [
+            [
+                "33625159.751a4e",
+                "54df4e97.e33ce"
+            ]
+        ]
+    },
+    {
+        "id": "33625159.751a4e",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Wet Bulb Temperature",
+        "topic": "Tempest_PWS/metrics/temperature/wet_bulb",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2480,
+        "y": 3260,
+        "wires": []
+    },
+    {
+        "id": "c1c9ae4a.9d729",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.delta_t",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1660,
+        "y": 3300,
+        "wires": [
+            [
+                "a5cb0e70.0f4b",
+                "79d50ec9.2cdf5"
+            ]
+        ]
+    },
+    {
+        "id": "a5cb0e70.0f4b",
+        "type": "mqtt out",
+        "z": "19cef663.c9958a",
+        "name": "Delta Temperature",
+        "topic": "Tempest_PWS/metrics/temperature/delta_t",
+        "qos": "2",
+        "retain": "false",
+        "broker": "4cb98ab5.4b27c4",
+        "x": 2270,
+        "y": 3300,
+        "wires": []
+    },
+    {
+        "id": "25dc5c92.3faba4",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "func": "msg.payload = Number(msg.payload.elevation).toFixed(2);\nnode.status({fill:\"green\",shape:\"ring\",text:msg.payload + \" m\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1600,
+        "y": 2780,
+        "wires": [
+            [
+                "d8074e30.b32db",
+                "8258d112.cfb39"
+            ]
+        ]
+    },
+    {
+        "id": "d356e7c7.862608",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Livello Mare (mbar)",
+        "func": "msg.payload = Number((msg.payload.sea_level_pressure || 0).toFixed(0));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" mbar\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1630,
+        "y": 3200,
+        "wires": [
+            [
+                "409101b.cdb4a",
+                "eeb3652c.18fda8"
+            ]
+        ]
+    },
+    {
+        "id": "ffcc48e0.205f88",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "Densità Aria",
+        "func": "msg.payload = Number((msg.payload.air_density || 0).toFixed(3));\nnode.status({fill:\"green\",shape:\"dot\",text:msg.payload + \" kg/mc\"});\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 1610,
+        "y": 2960,
+        "wires": [
+            [
+                "f3706da2.de989",
+                "c3da5be0.0df5e8"
+            ]
+        ]
+    },
+    {
+        "id": "a5d7364f.42f878",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "FALSE READING FILTER",
+        "func": "var accumulata = msg.payload.acc;\nvar durata     = msg.payload.dur;\n\nif (accumulata === 0)\n{\n  durata = 0;\n  node.status({fill:\"red\",shape:\"dot\",text:\"FILTER\"});\n}\nelse\n{\n  durata = durata;\n  node.status({fill:\"green\",shape:\"dot\",text:\"PASS\"});\n}\n\nvar msg1 = { payload:accumulata };\nvar msg2 = { payload:durata };\nreturn [ msg1, msg2 ];\n",
+        "outputs": 2,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2170,
+        "y": 2860,
+        "wires": [
+            [
+                "809d266b.1accf8",
+                "b9931455.91c868"
+            ],
+            [
+                "1082f5ff.b54a3a",
+                "15787b14.4f8d05"
+            ]
+        ],
+        "outputLabels": [
+            "ACC",
+            "DUR"
+        ]
+    },
+    {
+        "id": "61517eef.4fd2e",
+        "type": "join",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1970,
+        "y": 2860,
+        "wires": [
+            [
+                "a5d7364f.42f878"
+            ]
+        ]
+    },
+    {
+        "id": "5aaa73b7.dc5a9c",
+        "type": "function",
+        "z": "19cef663.c9958a",
+        "name": "LIGHTNING FILTER",
+        "func": "var conteggio = msg.payload;\n\nif (conteggio < 5)\n{\n  conteggio = 0;\n  node.status({fill:\"red\",shape:\"dot\",text:\"FILTER\"});\n}\nelse\n{\n  conteggio = conteggio;\n  node.status({fill:\"green\",shape:\"dot\",text:\"PASS\"});\n}\n\nvar msg1 = { payload:conteggio };\nreturn [ msg1 ];\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "x": 2030,
+        "y": 3020,
+        "wires": [
+            [
+                "621f5636.849118",
+                "ad679259.f9061"
+            ]
+        ],
+        "outputLabels": [
+            "ACC"
+        ]
+    },
+    {
+        "id": "683a937b.44a92c",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "wind_speed",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1680,
+        "y": 280,
+        "wires": [
+            [
+                "54ac0440.54c25c"
+            ]
+        ]
+    },
+    {
+        "id": "ed462f73.e1be5",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "temperature",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1700,
+        "y": 720,
+        "wires": [
+            [
+                "54ac0440.54c25c",
+                "ff74b109.2567"
+            ]
+        ]
+    },
+    {
+        "id": "268af93d.658fc6",
+        "type": "change",
+        "z": "19cef663.c9958a",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "humidity",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1700,
+        "y": 760,
+        "wires": [
+            [
+                "ff74b109.2567"
+            ]
+        ]
+    },
+    {
+        "id": "4cb98ab5.4b27c4",
+        "type": "mqtt-broker",
+        "name": "MQTT Server",
+        "broker": "192.168.0.98",
+        "port": "1883",
+        "clientid": "NodeRED",
+        "usetls": false,
+        "compatmode": false,
+        "keepalive": "60",
+        "cleansession": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthPayload": "",
+        "closeTopic": "",
+        "closeQos": "0",
+        "closePayload": "",
+        "willTopic": "",
+        "willQos": "0",
+        "willPayload": ""
+    }
+]
